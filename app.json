@@ -1,9 +1,10 @@
 {
   "expo": {
-    "name": "goSquid",
-    "slug": "goSquid",
+    "name": "VoletMerchant",
+    "slug": "VoletMerchant",
     "privacy": "public",
     "sdkVersion": "32.0.0",
+    "description": "Volet Merchant App",
     "platforms": [
       "ios",
       "android"
@@ -23,7 +24,7 @@
       "**/*"
     ],
     "android": {
-      "package": "io.blueninja.goSquid",
+      "package": "io.blueninja.VoletMerchant",
       "versionCode": 1,
       "permissions": [
         "CAMERA",
@@ -31,7 +32,7 @@
       ]
     },
     "ios": {
-      "bundleIdentifier": "io.blueninja.goSquid",
+      "bundleIdentifier": "io.blueninja.VoletMerchant",
       "buildNumber": "1",
       "supportsTablet": false
     }
