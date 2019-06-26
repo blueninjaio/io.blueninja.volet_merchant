@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableHighlight, Dimensions, ScrollView, StatusBar, Image, TouchableOpacity,  } from 'react-native'
+import { Text, TouchableOpacity,  } from 'react-native'
 import { createStackNavigator } from "react-navigation";
 import { Icon } from "native-base"
 import Login from "./Login";

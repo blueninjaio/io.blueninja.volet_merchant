@@ -3,43 +3,11 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableHighlight,
   Dimensions,
   ScrollView,
-  StatusBar,
-  Image,
   TouchableOpacity,
   Picker
 } from "react-native";
-import {
-  Container,
-  Content,
-  Footer,
-  FooterTab,
-  Icon,
-  Title,
-  Subtitle,
-  Item,
-  InputGroup,
-  Input,
-  Badge,
-  Header,
-  Left,
-  Body,
-  Right,
-  Accordion,
-  Tab,
-  Tabs,
-  Card,
-  CardItem,
-  Thumbnail,
-  Form,
-  Label,
-  Switch,
-  Textarea,
-  CheckBox
-} from "native-base";
-import { LinearGradient } from "expo";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
 
@@ -60,6 +28,13 @@ export class BusinessInfo extends Component {
       legalName: ""
     };
   }
+
+
+  /**
+  |--------------------------------------------------
+  | Input check! NOTES-> TO be altered soon
+  |--------------------------------------------------
+  */
   inputCheck = () => {
     this.props.navigation.navigate("BillingInfo", {
       companyName: this.state.companyName,

@@ -3,44 +3,10 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableHighlight,
   Dimensions,
-  ScrollView,
-  StatusBar,
-  Image,
-  TouchableOpacity,
-  Picker
+  TouchableOpacity
 } from "react-native";
-import {
-  Container,
-  Content,
-  Footer,
-  FooterTab,
-  Icon,
-  Title,
-  Subtitle,
-  Item,
-  InputGroup,
-  Input,
-  Badge,
-  Header,
-  Left,
-  Body,
-  Right,
-  Accordion,
-  Tab,
-  Tabs,
-  Card,
-  CardItem,
-  Thumbnail,
-  Form,
-  Label,
-  Switch,
-  Textarea,
-  CheckBox
-} from "native-base";
-import { LinearGradient } from "expo";
-import { TextInput } from "react-native-gesture-handler";
+import { Icon } from "native-base";
 export const { width, height } = Dimensions.get("window");
 
 export class ValidateApplication extends Component {

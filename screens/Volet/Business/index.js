@@ -1,33 +1,13 @@
-import React, { Component } from "react";
-import {
-  View,
-  Dimensions,
-  FlatList,
-  TouchableOpacity,
-  ImageBackground,
-  StyleSheet,
-  TextInput,
-  ScrollView,
-  StatusBar,
-  Text,
-  AsyncStorage,
-  Image,
-  ListItem
-} from "react-native";
-import {
-  SafeAreaView,
-  createStackNavigator,
-  NavigationEvents
-} from "react-navigation";
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+import React from "react";
+import { TouchableOpacity, Text } from "react-native";
+import { createStackNavigator } from "react-navigation";
 
 import Business from "./Business";
 import SellerAcc from "./AddSellerAcc";
 import BusinessInfo from "./BusinessInfo";
 import BillingInfo from "./BillingInfo";
 import ConfirmApp from "./ConfirmApplication";
-import ValidateApp from "./ValidateApplication"
+import ValidateApp from "./ValidateApplication";
 
 const MyBusinessScreen = ({ navigation }) => (
   <Business navigation={navigation} />
@@ -49,8 +29,11 @@ MySellerAccScreen.navigationOptions = {
   headerStyle: {
     backgroundColor: "white"
   },
-  headerRight:<TouchableOpacity><Text>Cancel</Text></TouchableOpacity>
-
+  headerRight: (
+    <TouchableOpacity>
+      <Text>Cancel</Text>
+    </TouchableOpacity>
+  )
 };
 
 const MyBusinessInfoScreen = ({ navigation }) => (
@@ -62,8 +45,11 @@ MyBusinessInfoScreen.navigationOptions = {
   headerStyle: {
     backgroundColor: "white"
   },
-  headerRight:<TouchableOpacity><Text>Cancel</Text></TouchableOpacity>
-
+  headerRight: (
+    <TouchableOpacity>
+      <Text>Cancel</Text>
+    </TouchableOpacity>
+  )
 };
 
 const MyBillingInfoScreen = ({ navigation }) => (
@@ -75,10 +61,12 @@ MyBillingInfoScreen.navigationOptions = {
   headerStyle: {
     backgroundColor: "white"
   },
-  headerRight:<TouchableOpacity><Text>Cancel</Text></TouchableOpacity>
-
+  headerRight: (
+    <TouchableOpacity>
+      <Text>Cancel</Text>
+    </TouchableOpacity>
+  )
 };
-
 
 const MyConfirmAppScreen = ({ navigation }) => (
   <ConfirmApp navigation={navigation} />
@@ -89,8 +77,11 @@ MyConfirmAppScreen.navigationOptions = {
   headerStyle: {
     backgroundColor: "white"
   },
-  headerRight:<TouchableOpacity><Text>Cancel</Text></TouchableOpacity>
-
+  headerRight: (
+    <TouchableOpacity>
+      <Text>Cancel</Text>
+    </TouchableOpacity>
+  )
 };
 
 const MyValidateAppScreen = ({ navigation }) => (
@@ -102,11 +93,8 @@ MyValidateAppScreen.navigationOptions = {
   headerStyle: {
     backgroundColor: "white"
   },
-  headerLeft:null
-  // headerRight:<TouchableOpacity><Text>Cancel</Text></TouchableOpacity>
-
+  headerLeft: null
 };
-
 
 const ModalStack = createStackNavigator(
   {
@@ -122,17 +110,16 @@ const ModalStack = createStackNavigator(
     BillingInfo: {
       screen: MyBillingInfoScreen
     },
-    ConfirmApp:{
+    ConfirmApp: {
       screen: MyConfirmAppScreen
     },
-    ValidateApp:{
+    ValidateApp: {
       screen: MyValidateAppScreen
     }
   },
   {
     defaultNavigationOptions: {
       header: null
-      //headerLeft: null,
     }
   }
 );

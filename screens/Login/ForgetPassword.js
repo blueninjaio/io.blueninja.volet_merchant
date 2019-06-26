@@ -3,84 +3,59 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableHighlight,
   Dimensions,
-  ScrollView,
-  StatusBar,
-  Image,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Alert
 } from "react-native";
-import {
-  Container,
-  Content,
-  Footer,
-  FooterTab,
-  Icon,
-  Title,
-  Subtitle,
-  Item,
-  InputGroup,
-  Input,
-  Badge,
-  Header,
-  Left,
-  Body,
-  Right,
-  Accordion,
-  Tab,
-  Tabs,
-  Card,
-  CardItem,
-  Thumbnail,
-  Form,
-  Label,
-  Switch,
-  Textarea,
-  CheckBox
-} from "native-base";
-import { LinearGradient } from "expo";
 export const { width, height } = Dimensions.get("window");
-const url = "http://165.22.245.137";
+import { dev, prod, url } from "../../config";
 
 
-export class ForgetPassword extends Component {
+export class ResetPassword extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      contact: "",
-      tempPassword: ""
+      email: ""
     };
   }
 
-  forgetpassword = () => {
-    fetch(`${url}/api/merchants/resetPassword`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8"
-      },
-      body: JSON.stringify({
-        email: this.state.email,
+  /**
+  |--------------------------------------------------
+  | Forgot Password Implementation
+  |--------------------------------------------------
+  */
+
+ forgetpassword = () => {
+  fetch(`${url}/api/merchants/tempPassword`, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify({
+      email: this.state.email
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Forgot password :", data);
+      this.props.navigation.navigate("ResetPassword",{
+        temporaryPassword: data.temporaryPassword,
+        email: this.state.email
       })
     })
-      .then(res => res.json())
-      .then(data => {
-        console.log("Forgot password :", data);
-        // this.props.navigation.navigate("SetPin")
-        // onPress={() => this.props.navigation.navigate("Home")}
-      })
-      .catch(error => {
-        console.log("Error sign up", error)
-        Alert.alert(
-          "Error connecting to server",
-          `${error}`,
-          [{ text: "OK", onPress: () => null }],
-          { cancelable: false }
-        );
-      });
-  };
+    .catch(error => {
+      Alert.alert(
+        "Error connecting to server",
+        `Please check your internet or try again later`,
+        [{ text: "OK", onPress: () => null }],
+        { cancelable: false }
+      );
+    });
+};
+
 
   render() {
     return (
@@ -88,8 +63,8 @@ export class ForgetPassword extends Component {
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <View style={{ width: width / 1.5, paddingTop: 30 }}>
             <Text style={{ textAlign: "center" }}>
-              Please enter your mobile number and your temporary password to
-              receive a new TAC code and reset your
+              Please enter your email and mobile number below to recieve a
+              temporary password
             </Text>
           </View>
           <View
@@ -99,7 +74,7 @@ export class ForgetPassword extends Component {
               paddingTop: 30
             }}
           >
-            <Text>Mobile number</Text>
+            <Text>Email</Text>
             <TextInput
               style={{
                 alignSelf: "center",
@@ -110,56 +85,15 @@ export class ForgetPassword extends Component {
                 color: "rgb(74,74,74)",
                 backgroundColor: "rgb(226,226,226)"
               }}
-              onChangeText={contact => this.setState({ hpNumber })}
-              value={this.state.contact}
+              onChangeText={email => this.setState({ email })}
+              value={this.state.email}
               type="text"
+              placeholder="Email"
               placeholderTextColor="rgb(74,74,74)"
             />
           </View>
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "flex-start",
-              paddingTop: 30
-            }}
-          >
-            <Text>Temporary</Text>
-            <TextInput
-              style={{
-                alignSelf: "center",
-                width: width / 1.2,
-                paddingLeft: 20,
-                // borderRadius: 20,
-                height: 50,
-                color: "rgb(74,74,74)",
-                backgroundColor: "rgb(226,226,226)"
-              }}
-              onChangeText={tempPassword => this.setState({ tempPassword })}
-              value={this.state.tempPassword}
-              type="text"
-              placeholder="password"
-              placeholderTextColor="rgb(74,74,74)"
-            />
-          </View>
-        </View>
-        <View
-          style={{
-            justifyContent: "flex-end",
-            alignItems: "center",
-            height: height / 2
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("FPTac")}
-            style={{ padding: 20 }}
-          >
-            <Text>Request Code</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("FPTac")}
-            style={{ padding: 20 }}
-          >
-            <Text>Resend Code</Text>
+          <TouchableOpacity onPress={() => this.forgetpassword()}>
+            <Text>Submit</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -167,7 +101,7 @@ export class ForgetPassword extends Component {
   }
 }
 
-export default ForgetPassword;
+export default ResetPassword;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

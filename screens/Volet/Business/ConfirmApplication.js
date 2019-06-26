@@ -3,51 +3,17 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableHighlight,
   Dimensions,
   ScrollView,
-  StatusBar,
-  Image,
   TouchableOpacity,
-  Picker
 } from "react-native";
-import {
-  Container,
-  Content,
-  Footer,
-  FooterTab,
-  Icon,
-  Title,
-  Subtitle,
-  Item,
-  InputGroup,
-  Input,
-  Badge,
-  Header,
-  Left,
-  Body,
-  Right,
-  Accordion,
-  Tab,
-  Tabs,
-  Card,
-  CardItem,
-  Thumbnail,
-  Form,
-  Label,
-  Switch,
-  Textarea,
-  CheckBox
-} from "native-base";
-import { LinearGradient } from "expo";
-import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
-const url = "http://165.22.245.137";
+import { dev, prod, url } from "../../../config";
+
 
 export class ConfirmApplication extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       firstName: this.props.navigation.state.params.firstName,
       lastName: this.props.navigation.state.params.lastName,
@@ -61,8 +27,7 @@ export class ConfirmApplication extends Component {
       busniessCategory: this.props.navigation.state.params.busniessCategory,
       businessEmail: this.props.navigation.state.params.businessEmail,
       businessContact: this.props.navigation.state.params.businessContact,
-      busniessRegisterNum: this.props.navigation.state.params
-        .busniessRegisterNum,
+      busniessRegisterNum: this.props.navigation.state.params.busniessRegisterNum,
       tax: this.props.navigation.state.params.tax,
       businessWebsite: this.props.navigation.state.params.businessWebsite,
       paymentMethod: this.props.navigation.state.params.paymentMethod,
@@ -78,10 +43,13 @@ export class ConfirmApplication extends Component {
     };
   }
 
-  inputCheck = () => {
-    console.log("first name: ", this.props.navigation.state.params.firstName);
-    console.log("last name: ", this.props.navigation.state.params.lastName);
+  /**
+  |--------------------------------------------------
+  | Add Business Implementation
+  |--------------------------------------------------
+  */
 
+  addBusiness = () => {
     fetch(`${url}/api/business/`, {
       method: "POST",
       mode: "cors",
@@ -499,7 +467,7 @@ export class ConfirmApplication extends Component {
               paddingTop: 30
             }}
           >
-            <TouchableOpacity onPress={() => this.inputCheck()}>
+            <TouchableOpacity onPress={() => this.addBusiness()}>
               <Text>Submit</Text>
             </TouchableOpacity>
           </View>

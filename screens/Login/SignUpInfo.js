@@ -41,7 +41,8 @@ import {
 import { LinearGradient } from "expo";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
-const url = "http://165.22.245.137";
+import { dev, prod, url } from "../../config";
+
 
 export class SignUpInfo extends Component {
   constructor(props) {
@@ -55,7 +56,6 @@ export class SignUpInfo extends Component {
       CPassword: "",
       facebook_id: null,
       google_id: null
-      // contact: "012312838129"
     };
   }
 
@@ -69,7 +69,6 @@ export class SignUpInfo extends Component {
       body: JSON.stringify({
         facebook_id: this.state.facebook_id,
         google_id: this.state.google_id,
-        // contact: this.state.contact ,
         contact: this.props.navigation.state.params.contact,
         f_name: this.state.firstName,
         l_name: this.state.lastName,
@@ -95,8 +94,6 @@ export class SignUpInfo extends Component {
             { cancelable: false }
           );
         }
-        // this.props.navigation.navigate("SetPin")
-        // onPress={() => this.props.navigation.navigate("Home")}
       })
       .catch(error => {
         Alert.alert(

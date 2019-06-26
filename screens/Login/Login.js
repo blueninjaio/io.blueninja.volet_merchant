@@ -3,45 +3,17 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableHighlight,
   Dimensions,
   ScrollView,
-  StatusBar,
-  Image,
+  AsyncStorage,
   TouchableOpacity
 } from "react-native";
-import {
-  Container,
-  Content,
-  Footer,
-  FooterTab,
-  Icon,
-  Title,
-  Subtitle,
-  Item,
-  InputGroup,
-  Input,
-  Badge,
-  Header,
-  Left,
-  Body,
-  Right,
-  Accordion,
-  Tab,
-  Tabs,
-  Card,
-  CardItem,
-  Thumbnail,
-  Form,
-  Label,
-  Switch,
-  Textarea,
-  CheckBox
-} from "native-base";
-import { LinearGradient } from "expo";
+import { Icon, Left, Body, Right } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
-const url = "http://165.22.245.137";
+import { connect } from "react-redux";
+
+import { dev, prod, url } from "../../config";
 
 export class Login extends Component {
   constructor(props) {
@@ -53,49 +25,107 @@ export class Login extends Component {
     };
   }
 
-  userLogin = () => {
-    fetch(`${url}/api/merchants/login`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8"
-      },
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password
-      })
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log("Login :", data);
-        if (data.success === true) {
-          Alert.alert(
-            "Success",
-            `${data.message}`,
-            [{ text: "OK", onPress: () => null }],
-            { cancelable: false }
-          );
-        } else {
-          Alert.alert(
-            "Fail",
-            `${data.message}`,
-            [{ text: "OK", onPress: () => null }],
-            { cancelable: false }
-          );
-        }
+  // userLogin = () => {
+  //   fetch(`${url}/api/merchants/login`, {
+  //     method: "POST",
+  //     mode: "cors",
+  //     headers: {
+  //       "Content-Type": "application/json; charset=utf-8"
+  //     },
+  //     body: JSON.stringify({
+  //       email: this.state.email,
+  //       password: this.state.password
+  //     })
+  //   })
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       console.log("Login :", data);
+  //       if (data.success === true) {
+  //         Alert.alert(
+  //           "Success",
+  //           `${data.message}`,
+  //           [{ text: "OK", onPress: () => null }],
+  //           { cancelable: false }
+  //         );
+  //       } else {
+  //         Alert.alert(
+  //           "Fail",
+  //           `${data.message}`,
+  //           [{ text: "OK", onPress: () => null }],
+  //           { cancelable: false }
+  //         );
+  //       }
 
-        // onPress={() => this.props.navigation.navigate("Home")}
+  //       // onPress={() => this.props.navigation.navigate("Home")}
+  //     })
+  //     .catch(error => {
+  //       Alert.alert(
+  //         "Error connecting to server",
+  //         `Please check your internet or try again later`,
+  //         [{ text: "OK", onPress: () => null }],
+  //         { cancelable: false }
+  //       );
+  //     });
+  // };
+
+  /**
+  |--------------------------------------------------
+  | Login Implementing Redux
+  |--------------------------------------------------
+  */
+  reduxLogin = () => {
+    if (this.state.email.length < 5 || !this.state.email.includes("@"))
+      alert(`Please enter a valid email address.`);
+    else if (this.state.password.length < 6) alert(`Please enter a password.`);
+    else {
+      fetch(`${dev}/api/merchants/login`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        body: JSON.stringify({
+          email: this.state.email,
+          password: this.state.password
+        })
       })
-      .catch(error => {
-        Alert.alert(
-          "Error connecting to server",
-          `Please check your internet or try again later`,
-          [{ text: "OK", onPress: () => null }],
-          { cancelable: false }
-        );
-      });
+        .then(response => response.json())
+        .then(data => {
+          console.log("Fetch Data: ", data);
+          if (data.success) {
+            this._storeData(data.token).then(() => {
+              this.props.logMeIn();
+            });
+          } else alert(data.message);
+        })
+        .catch(err => {
+          //To be removed in production
+          console.log("Error for login:", err);
+
+          Alert.alert(
+            "Error connecting to server",
+            `Please try again later`,
+            [{ text: "OK", onPress: () => null }],
+            { cancelable: false }
+          );
+        });
+    }
   };
 
+  /**
+  |--------------------------------------------------
+  | Store Token to Async Storage
+  |--------------------------------------------------
+  */
+  _storeData = async token => {
+    try {
+      // console.log("Saving")
+      await AsyncStorage.setItem("token", token);
+      // console.log('Saved')
+    } catch (error) {
+      alert(error);
+    }
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -179,7 +209,7 @@ export class Login extends Component {
               paddingTop: 30
             }}
           >
-            <TouchableOpacity onPress={() => this.userLogin()}>
+            <TouchableOpacity onPress={() => this.reduxLogin()}>
               <Text>Log In</Text>
             </TouchableOpacity>
           </View>
@@ -188,7 +218,24 @@ export class Login extends Component {
     );
   }
 }
-export default Login;
+
+const mapStateToProps = state => {
+  return {
+    login: state
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logMeIn: () => dispatch({ type: "LOGIN" })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
