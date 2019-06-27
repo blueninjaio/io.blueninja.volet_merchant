@@ -25,49 +25,6 @@ export class Login extends Component {
     };
   }
 
-  // userLogin = () => {
-  //   fetch(`${url}/api/merchants/login`, {
-  //     method: "POST",
-  //     mode: "cors",
-  //     headers: {
-  //       "Content-Type": "application/json; charset=utf-8"
-  //     },
-  //     body: JSON.stringify({
-  //       email: this.state.email,
-  //       password: this.state.password
-  //     })
-  //   })
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       console.log("Login :", data);
-  //       if (data.success === true) {
-  //         Alert.alert(
-  //           "Success",
-  //           `${data.message}`,
-  //           [{ text: "OK", onPress: () => null }],
-  //           { cancelable: false }
-  //         );
-  //       } else {
-  //         Alert.alert(
-  //           "Fail",
-  //           `${data.message}`,
-  //           [{ text: "OK", onPress: () => null }],
-  //           { cancelable: false }
-  //         );
-  //       }
-
-  //       // onPress={() => this.props.navigation.navigate("Home")}
-  //     })
-  //     .catch(error => {
-  //       Alert.alert(
-  //         "Error connecting to server",
-  //         `Please check your internet or try again later`,
-  //         [{ text: "OK", onPress: () => null }],
-  //         { cancelable: false }
-  //       );
-  //     });
-  // };
-
   /**
   |--------------------------------------------------
   | Login Implementing Redux

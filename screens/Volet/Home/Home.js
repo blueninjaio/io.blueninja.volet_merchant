@@ -95,15 +95,6 @@ export default class App extends React.Component {
               >
                 Your Volet Balance
               </Text>
-              {/* <LinearTextGradient
-                style={{ fontWeight: "bold", fontSize: 72 }}
-                colors={['#36D1DC', '#5B86E5']}
-                locations={[0, 1]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                >
-                RM200.00
-              </LinearTextGradient> */}
               <Text style={{ fontSize: 25, fontWeight: "bold" }}>RM200.00</Text>
             </View>
           </View>
