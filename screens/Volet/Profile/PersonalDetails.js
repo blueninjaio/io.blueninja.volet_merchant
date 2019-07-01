@@ -26,7 +26,6 @@ export class PersonalDetails extends Component {
     };
   }
 
-
   /**
   |--------------------------------------------------
   | Implementing Permission Requst for Image picker
@@ -92,11 +91,19 @@ export class PersonalDetails extends Component {
                 // backgroundColor: "grey"
               }}
             >
-              <Thumbnail
-                large
-                style={{ backgroundColor: "grey" }}
-                source={{ uri: `${this.state.imageUri}` }}
-              />
+              {this.state.imageUri !== "" ? (
+                <Thumbnail
+                  large
+                  style={{ backgroundColor: "grey" }}
+                  source={{ uri: `${this.state.imageUri}` }}
+                />
+              ) : (
+                <Thumbnail
+                  large
+                  style={{ backgroundColor: "grey" }}
+                  // source={{ uri: `${this.state.imageUri}` }}
+                />
+              )}
               <TouchableOpacity
                 style={{
                   //   justifyContent: "flex-start",

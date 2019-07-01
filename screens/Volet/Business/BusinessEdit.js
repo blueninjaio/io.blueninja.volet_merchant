@@ -28,8 +28,8 @@ export class BusinessEdit extends Component {
       selectedProducts: null,
       isEndTimePickerVisible: false,
       isStartTimePickerVisible:false,
-      startTime: "00:00:00",
-      endTime:"23:59:00",
+      startTime: new Date(),
+      endTime: new Date()
     };
   }
 
@@ -294,24 +294,28 @@ export class BusinessEdit extends Component {
                     }}
                   >
                     <TouchableOpacity onPress={this.showStartTimePicker} style={{padding: 20, }}>
-                      <Text>{this.state.startTime}</Text>
+                      <Text>start time</Text>
                     </TouchableOpacity>
                     <DateTimePicker
-                      mode="time"
+                      mode={"time"}
                       date={this.state.startTime}
                       isVisible={this.state.isStartTimePickerVisible}
                       onConfirm={this.handleStartPicked}
                       onCancel={this.hideStartTimePicker}
+                      // onDateChange={startTime => this.setState({ startTime })}
                     />
                     <TouchableOpacity onPress={this.showEndTimePicker} style={{padding: 20,}}>
-                      <Text>{this.state.endTime}</Text>
+                      <Text>End time</Text>
+
                     </TouchableOpacity>
                     <DateTimePicker
-                      mode="time"
+                      mode={"time"}
                       date={this.state.endTime}
                       isVisible={this.state.isEndTimePickerVisible}
                       onConfirm={this.handleEndPicked}
                       onCancel={this.hideEndTimePicker}
+                      // onDateChange={endTime => this.setState({ endTime })}
+
                     />
                   </View>
                 </View>

@@ -4247,7 +4247,7 @@ moment-timezone@^0.5.23:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@^2.22.2:
+"moment@>= 2.9.0", moment@^2.22.1, moment@^2.22.2:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
@@ -4969,6 +4969,13 @@ react-native-branch@2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
   integrity sha1-QHTdY7SXPmOX2c5Q6XtXx3pRjp0=
+
+react-native-date-picker@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-2.4.2.tgz#f9edaef29ce2bd3d4b29a56effdc3c552cc20079"
+  integrity sha512-OEjmaBgzV3W0G+il8viFNMo3PcG37SAknJpipCSsB6KNJqvgulynFaZDXYmWCC+/QtsXsmsLWiq34/QqdWy0IA==
+  dependencies:
+    moment "^2.22.1"
 
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"

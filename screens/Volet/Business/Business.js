@@ -82,7 +82,7 @@ export class Business extends Component {
         </View>
         {this.state.service.map((x, i) => (
           <TouchableOpacity
-            key={x}
+            key={i}
             style={{
               flexDirection: "row",
               borderWidth: 1,

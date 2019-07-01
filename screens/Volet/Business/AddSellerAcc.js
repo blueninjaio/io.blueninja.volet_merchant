@@ -10,7 +10,7 @@ import {
 import { Icon } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
-import { ImagePicker} from "expo"
+import { ImagePicker, Permissions } from "expo";
 
 export class AddSellerAcc extends Component {
   constructor(props) {
@@ -42,6 +42,49 @@ export class AddSellerAcc extends Component {
     });
   };
 
+  /**
+  |--------------------------------------------------
+  | Implementing Permission Requst for Image picker
+  |--------------------------------------------------
+  */
+  componentDidMount() {
+    this.getPermissionAsync();
+  }
+  getPermissionAsync = async () => {
+    const permission = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+    if (permission.status !== "granted") {
+      const newPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (newPermission.status === "granted") {
+        //its granted.
+      }
+    }
+  };
+
+  /**
+|--------------------------------------------------
+| Image Picker Implementation
+|--------------------------------------------------
+*/
+  _onChoosePic = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3]
+    });
+    console.log("Image link", result); // this logs correctly
+    if (!result.cancelled) {
+      this.setState({ imageUri: result.uri });
+      // TODO: why isn't this showing up inside the Image on screen?
+    }
+  };
+
+  // When "Take" is pressed, we show the user's camera so they
+  // can take a photo to show inside the image view on screen.
+  _onTakePic = async () => {
+    const { cancelled, uri } = await Expo.ImagePicker.launchCameraAsync({});
+    if (!cancelled) {
+      this.setState({ imgUri: uri });
+    }
+  };
   render() {
     return (
       <View styles={styles.container}>
@@ -192,7 +235,7 @@ export class AddSellerAcc extends Component {
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>
-            <TouchableOpacity
+            <TouchableOpacity onPress={()=> this._onChoosePic()}
               style={{
                 justifyContent: "flex-start",
                 alignItems: "center",
