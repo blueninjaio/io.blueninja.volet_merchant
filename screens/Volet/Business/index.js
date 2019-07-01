@@ -8,8 +8,11 @@ import BusinessInfo from "./BusinessInfo";
 import BillingInfo from "./BillingInfo";
 import ConfirmApp from "./ConfirmApplication";
 import ValidateApp from "./ValidateApplication";
+import BusinessEdit from "./BusinessEdit";
 
-const MyBusinessScreen = ({ navigation }) => (
+const MyBusinessScreen = ({ tabBar, navigation }) => (
+  console.log("Navigation", navigation),
+  console.log("Tab bar", tabBar),
   <Business navigation={navigation} />
 );
 MyBusinessScreen.navigationOptions = {
@@ -20,7 +23,9 @@ MyBusinessScreen.navigationOptions = {
   }
 };
 
-const MySellerAccScreen = ({ navigation }) => (
+const MySellerAccScreen = ({ tabBar, navigation }) => (
+  console.log("Navigation", navigation),
+  console.log("Tab bar", tabBar),
   <SellerAcc navigation={navigation} />
 );
 MySellerAccScreen.navigationOptions = {
@@ -33,7 +38,9 @@ MySellerAccScreen.navigationOptions = {
     <TouchableOpacity>
       <Text>Cancel</Text>
     </TouchableOpacity>
-  )
+  ),
+  // tabBarVisible: false
+
 };
 
 const MyBusinessInfoScreen = ({ navigation }) => (
@@ -96,13 +103,29 @@ MyValidateAppScreen.navigationOptions = {
   headerLeft: null
 };
 
+const MyBusinessEditScreen = ({ navigation }) => (
+  <BusinessEdit navigation={navigation} />
+);
+MyBusinessEditScreen.navigationOptions = {
+  mode: "card",
+  title: "Business",
+  headerStyle: {
+    backgroundColor: "white"
+  },
+  headerLeft: null
+};
+
 const ModalStack = createStackNavigator(
   {
     Business: {
       screen: MyBusinessScreen
     },
     SellerAcc: {
-      screen: MySellerAccScreen
+      screen: MySellerAccScreen,
+      // navigationOptions: {
+      //   gesturesEnabled: false,
+      //   tabBarVisible: false
+      // }
     },
     BusinessInfo: {
       screen: MyBusinessInfoScreen
@@ -115,6 +138,9 @@ const ModalStack = createStackNavigator(
     },
     ValidateApp: {
       screen: MyValidateAppScreen
+    },
+    BusinessEdit: {
+      screen: MyBusinessEditScreen
     }
   },
   {

@@ -10,7 +10,6 @@ import {
   Image,
   TouchableOpacity
 } from "react-native";
-import { Switch } from "native-base";
 import { LinearGradient } from "expo";
 
 export class Profile extends React.Component {
@@ -62,40 +61,8 @@ export class Profile extends React.Component {
             </LinearGradient>
           </View>
           <View>
-            <View style={styles.shadowSet}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("")}
-                style={styles.listItemButtonSwitch}
-              >
-                <View style={styles.show}>
-                  <Image
-                    source={require("../../../assets/glasses.png")}
-                    resizeMode="contain"
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.listItemText}>
-                    Show / Hide Visibility
-                  </Text>
-                </View>
-                <Switch value={true} />
-              </TouchableOpacity>
-            </View>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("")}
-              style={styles.listItemButton}
-            >
-              <View style={styles.show}>
-                <Image
-                  source={require("../../../assets/pen.png")}
-                  resizeMode="contain"
-                  style={{ width: 40, height: 40 }}
-                />
-                <Text style={styles.listItemText}>Manage Volet Balance</Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("")}
+              onPress={() => this.props.navigation.navigate("PersonalDetails")}
               style={styles.listItemButton}
             >
               <View style={styles.show}>
@@ -118,7 +85,7 @@ export class Profile extends React.Component {
                   resizeMode="contain"
                   style={{ width: 40, height: 40 }}
                 />
-                <Text style={styles.listItemText}>Monthly Savings Plan</Text>
+                <Text style={styles.listItemText}>Withdraw Volet</Text>
               </View>
             </TouchableOpacity>
 
@@ -145,11 +112,24 @@ export class Profile extends React.Component {
                   resizeMode="contain"
                   style={{ width: 40, height: 40 }}
                 />
-                <Text style={styles.listItemText}>Payment Method</Text>
+                <Text style={styles.listItemText}>Billing Method</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("DeepWorks")}
+              onPress={() => this.props.navigation.navigate("")}
+              style={styles.listItemButton}
+            >
+              <View style={styles.show}>
+                <Image
+                  source={require("../../../assets/pen.png")}
+                  resizeMode="contain"
+                  style={{ width: 40, height: 40 }}
+                />
+                <Text style={styles.listItemText}>Reviews and Ratings</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate("Setting")}
               style={styles.listItemButton}
             >
               <View style={styles.show}>

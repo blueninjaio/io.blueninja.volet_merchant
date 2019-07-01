@@ -20,8 +20,8 @@ export class Login extends Component {
     super(props);
 
     this.state = {
-      email: "",
-      password: ""
+      email: "dev_apple@blueninja.io",
+      password: "12345678"
     };
   }
 

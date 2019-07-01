@@ -7,12 +7,12 @@ import {
   ScrollView,
   TouchableOpacity
 } from "react-native";
-import { Icon } from "native-base";
+import { Icon, Thumbnail } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
-import { ImagePicker} from "expo"
+import { ImagePicker, Permissions } from "expo";
 
-export class AddSellerAcc extends Component {
+export class PersonalDetails extends Component {
   constructor(props) {
     super(props);
 
@@ -21,25 +21,54 @@ export class AddSellerAcc extends Component {
       lastName: "",
       email: "",
       contact: "",
-      id: "",
-      icImage: ""
+      address: "",
+      imageUri: ""
     };
   }
 
+
   /**
   |--------------------------------------------------
-  | Input check! NOTES-> TO be altered soon
+  | Implementing Permission Requst for Image picker
   |--------------------------------------------------
   */
-  inputCheck = () => {
-    this.props.navigation.navigate("BusinessInfo", {
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      email: this.state.email,
-      contact: this.state.contact,
-      id: this.state.id,
-      icImage: this.state.icImage
+  componentDidMount() {
+    this.getPermissionAsync();
+  }
+  getPermissionAsync = async () => {
+    const permission = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+    if (permission.status !== "granted") {
+      const newPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (newPermission.status === "granted") {
+        //its granted.
+      }
+    }
+  };
+
+  /**
+  |--------------------------------------------------
+  | Image Picker Implementation
+  |--------------------------------------------------
+  */
+  _onChoosePic = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3]
     });
+    console.log("Image link", result); // this logs correctly
+    if (!result.cancelled) {
+      this.setState({ imageUri: result.uri });
+      // TODO: why isn't this showing up inside the Image on screen?
+    }
+  };
+
+  // When "Take" is pressed, we show the user's camera so they
+  // can take a photo to show inside the image view on screen.
+  _onTakePic = async () => {
+    const { cancelled, uri } = await Expo.ImagePicker.launchCameraAsync({});
+    if (!cancelled) {
+      this.setState({ imgUri: uri });
+    }
   };
 
   render() {
@@ -51,21 +80,35 @@ export class AddSellerAcc extends Component {
               justifyContent: "center",
               alignItems: "center",
               paddingLeft: 15,
-              paddingRight: 20
+              paddingRight: 20,
+              marginTop: 30
             }}
           >
             <View
               style={{
-                alignItems: "flex-start",
-                justifyContent: "space-around",
-                height: height / 8
+                alignItems: "center",
+                justifyContent: "center"
+                // height: height / 8
                 // backgroundColor: "grey"
               }}
             >
-              <Text>Create Seller Account</Text>
-              <Text>
-                Create a seller account to start your business in Volet
-              </Text>
+              <Thumbnail
+                large
+                style={{ backgroundColor: "grey" }}
+                source={{ uri: `${this.state.imageUri}` }}
+              />
+              <TouchableOpacity
+                style={{
+                  //   justifyContent: "flex-start",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  paddingTop: 30
+                }}
+                onPress={() => this._onChoosePic()}
+              >
+                <Icon name="ios-add-circle-outline" type="Ionicons" />
+                <Text>Upload Profile Images</Text>
+              </TouchableOpacity>
             </View>
             <View
               style={{
@@ -167,43 +210,6 @@ export class AddSellerAcc extends Component {
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "flex-start",
-                paddingTop: 30
-              }}
-            >
-              <Text>IC / Passport Number</Text>
-              <TextInput
-                style={{
-                  alignSelf: "center",
-                  width: width / 1.2,
-                  paddingLeft: 20,
-                  // borderRadius: 20,
-                  height: 50,
-                  color: "rgb(74,74,74)",
-                  backgroundColor: "rgb(226,226,226)"
-                }}
-                onChangeText={id => this.setState({ id })}
-                value={this.state.id}
-                type="text"
-                placeholder="Passport Number"
-                placeholderTextColor="rgb(74,74,74)"
-              />
-            </View>
-            <TouchableOpacity
-              style={{
-                justifyContent: "flex-start",
-                alignItems: "center",
-                flexDirection: "row",
-                paddingTop: 30
-              }}
-            >
-              <Icon name="ios-add-circle-outline" type="Ionicons" />
-              <Text>Upload IC / Passport Images</Text>
-            </TouchableOpacity>
-
             <TouchableOpacity
               style={{
                 justifyContent: "center",
@@ -212,7 +218,7 @@ export class AddSellerAcc extends Component {
               }}
               onPress={() => this.inputCheck()}
             >
-              <Text>Next</Text>
+              <Text>Save</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -221,7 +227,7 @@ export class AddSellerAcc extends Component {
   }
 }
 
-export default AddSellerAcc;
+export default PersonalDetails;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
