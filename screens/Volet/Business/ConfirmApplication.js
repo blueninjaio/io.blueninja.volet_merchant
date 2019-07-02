@@ -6,6 +6,7 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  Alert
 } from "react-native";
 export const { width, height } = Dimensions.get("window");
 import { dev, prod, url } from "../../../config";
@@ -50,6 +51,37 @@ export class ConfirmApplication extends Component {
   */
 
   addBusiness = () => {
+    console.log("Image", this.props.navigation.state.params.icImage)
+    console.log("Business number", this.props.navigation.state.params.businessContact)
+
+    console.log("Sending: ", {
+      f_name: this.props.navigation.state.params.firstName,
+        l_name: this.props.navigation.state.params.lastName,
+        email: this.props.navigation.state.params.email,
+        contact: this.props.navigation.state.params.contact,
+        identification: this.props.navigation.state.params.id,
+        identification_image: this.props.navigation.state.params.icImage,
+        // identification_image: null,
+        company_name: this.props.navigation.state.params.companyName,
+        branding: this.props.navigation.state.params.brandingName,
+        type_of_business: this.props.navigation.state.params.businessType,
+        busniess_category: this.props.navigation.state.params.busniessCategory,
+        business_email: this.props.navigation.state.params.businessEmail,
+        business_contact: this.props.navigation.state.params.businessContact,
+        busniess_number: this.props.navigation.state.params.busniessRegisterNum,
+        tax_number: this.props.navigation.state.params.tax,
+        // businessWebsite: this.props.navigation.state.params.businessWebsite,
+        payment_method: this.props.navigation.state.params.paymentMethod,
+        bank: this.props.navigation.state.params.bank,
+        currency: this.props.navigation.state.params.currency,
+        branch: this.props.navigation.state.params.branch,
+        account_num: this.props.navigation.state.params.bankAccNum,
+        billing_address: this.props.navigation.state.params.billingAddress,
+        postalcode: this.props.navigation.state.params.postalCode,
+        state: this.props.navigation.state.params.states,
+        country: this.props.navigation.state.params.country,
+        legal_name: this.props.navigation.state.params.legalName
+    })
     fetch(`${url}/api/business/`, {
       method: "POST",
       mode: "cors",
@@ -62,15 +94,15 @@ export class ConfirmApplication extends Component {
         email: this.props.navigation.state.params.email,
         contact: this.props.navigation.state.params.contact,
         identification: this.props.navigation.state.params.id,
-        // identification: this.props.navigation.state.params.icImage,
-        identification_image: null,
+        identification_image: this.props.navigation.state.params.icImage,
+        // identification_image: null,
         company_name: this.props.navigation.state.params.companyName,
         branding: this.props.navigation.state.params.brandingName,
         type_of_business: this.props.navigation.state.params.businessType,
         busniess_category: this.props.navigation.state.params.busniessCategory,
         business_email: this.props.navigation.state.params.businessEmail,
         business_contact: this.props.navigation.state.params.businessContact,
-        busniess_num: this.props.navigation.state.params.busniessRegisterNum,
+        busniess_number: this.props.navigation.state.params.busniessRegisterNum,
         tax_number: this.props.navigation.state.params.tax,
         // businessWebsite: this.props.navigation.state.params.businessWebsite,
         payment_method: this.props.navigation.state.params.paymentMethod,
@@ -464,7 +496,9 @@ export class ConfirmApplication extends Component {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              paddingTop: 30
+              paddingTop: 30,
+              marginBottom: 40
+
             }}
           >
             <TouchableOpacity onPress={() => this.addBusiness()}>

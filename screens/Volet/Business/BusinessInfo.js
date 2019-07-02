@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
+import { Dropdown } from "react-native-material-dropdown";
+import { dev, prod, url } from "../../../config";
 
 export class BusinessInfo extends Component {
   constructor(props) {
@@ -25,10 +27,10 @@ export class BusinessInfo extends Component {
       busniessRegisterNum: "",
       tax: "",
       businessWebsite: "",
-      legalName: ""
+      legalName: "",
+      businessList: []
     };
   }
-
 
   /**
   |--------------------------------------------------
@@ -53,11 +55,59 @@ export class BusinessInfo extends Component {
       contact: this.props.navigation.state.params.contact,
       id: this.props.navigation.state.params.id,
       icImage: this.props.navigation.state.params.icImage
-
     });
   };
 
+
+  /**
+  |--------------------------------------------------
+  | Implementation of get Business Categories
+  |--------------------------------------------------
+  */
+  componentDidMount = () => {
+    this.addBusiness();
+  };
+
+  addBusiness = () => {
+    let cateArray = [];
+    fetch(`${url}/api/category/`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.categories.length >= 1) {
+          data.categories.map(x => cateArray.push(x.title));
+          this.setState({ businessList: cateArray });
+          console.log("catearray", cateArray);
+        }
+      })
+      .catch(error => {
+        Alert.alert(
+          "Error connecting to server",
+          `${error}`,
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+      });
+  };
+
+  /**
+  |--------------------------------------------------
+  | Implementing Dropdown list
+  |--------------------------------------------------
+  */
+  createData() {
+    return this.state.businessList.map(el => ({
+      value: el
+    }));
+  }
+
   render() {
+    const dropDownValue = this.createData();
     return (
       <View styles={styles.container}>
         <ScrollView>
@@ -141,7 +191,7 @@ export class BusinessInfo extends Component {
               }}
             >
               <Text>Type of Business</Text>
-              <Picker
+              {/* <Picker
                 selectedValue={this.state.businessType}
                 style={{
                   height: 170,
@@ -155,8 +205,29 @@ export class BusinessInfo extends Component {
                 <Picker.Item label="Salon" value="salon" />
                 <Picker.Item label="Doorstep" value="Doorstep" />
                 <Picker.Item label="Shop" value="shop" />
-              </Picker>
+              </Picker> */}
+              <Dropdown
+                data={dropDownValue}
+                label="Select"
+                containerStyle={{
+                  // height: 170,
+                  width: width / 1.5
+                }}
+                dropdownMargins={{ min: 8, max: 16 }}
+                onChangeText={value => {
+                  this.setState({ businessType: value });
+                }}
+              />
             </View>
+          </View>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              paddingLeft: 15,
+              paddingRight: 20
+            }}
+          >
             <View
               style={{
                 justifyContent: "center",
@@ -173,21 +244,18 @@ export class BusinessInfo extends Component {
                   backgroundColor: "white"
                 }}
               > */}
-              <Picker
-                selectedValue={this.state.busniessCategory}
-                style={{
-                  height: 170,
-                  width: width / 1.5,
-                  backgroundColor: "grey"
+              <Dropdown
+                data={dropDownValue}
+                label="Select"
+                containerStyle={{
+                  // height: 170,
+                  width: width / 1.5
                 }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({ busniessCategory: itemValue })
-                }
-              >
-                <Picker.Item label="Salon" value="salon" />
-                <Picker.Item label="Doorstep" value="Doorstep" />
-                <Picker.Item label="Shop" value="shop" />
-              </Picker>
+                dropdownMargins={{ min: 8, max: 16 }}
+                onChangeText={value => {
+                  this.setState({ busniessCategory: value });
+                }}
+              />
               {/* </View> */}
             </View>
             <View
@@ -233,7 +301,9 @@ export class BusinessInfo extends Component {
                   color: "rgb(74,74,74)",
                   backgroundColor: "rgb(226,226,226)"
                 }}
-                onChangeText={businessContact => this.setState({ businessContact })}
+                onChangeText={businessContact =>
+                  this.setState({ businessContact })
+                }
                 value={this.state.businessContact}
                 type="text"
                 placeholder="Business Email "
@@ -310,7 +380,9 @@ export class BusinessInfo extends Component {
                   color: "rgb(74,74,74)",
                   backgroundColor: "rgb(226,226,226)"
                 }}
-                onChangeText={businessWebsite => this.setState({ businessWebsite })}
+                onChangeText={businessWebsite =>
+                  this.setState({ businessWebsite })
+                }
                 value={this.state.businessWebsite}
                 type="text"
                 placeholder="Business Website"
@@ -347,7 +419,8 @@ export class BusinessInfo extends Component {
               style={{
                 justifyContent: "center",
                 alignItems: "flex-start",
-                paddingTop: 30
+                paddingTop: 30,
+                marginBottom: 40
               }}
               onPress={() => this.inputCheck()}
             >

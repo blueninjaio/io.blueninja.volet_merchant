@@ -38,7 +38,8 @@ export class AddSellerAcc extends Component {
       email: this.state.email,
       contact: this.state.contact,
       id: this.state.id,
-      icImage: this.state.icImage
+      icImage: this.state.icImage,
+      // businessList: this.props.navigation.state.params.businessList
     });
   };
 
@@ -72,7 +73,7 @@ export class AddSellerAcc extends Component {
     });
     console.log("Image link", result); // this logs correctly
     if (!result.cancelled) {
-      this.setState({ imageUri: result.uri });
+      this.setState({ icImage: result.uri });
       // TODO: why isn't this showing up inside the Image on screen?
     }
   };
@@ -80,7 +81,7 @@ export class AddSellerAcc extends Component {
   // When "Take" is pressed, we show the user's camera so they
   // can take a photo to show inside the image view on screen.
   _onTakePic = async () => {
-    const { cancelled, uri } = await Expo.ImagePicker.launchCameraAsync({});
+    const { cancelled, uri } = await ImagePicker.launchCameraAsync({});
     if (!cancelled) {
       this.setState({ imgUri: uri });
     }
@@ -251,7 +252,8 @@ export class AddSellerAcc extends Component {
               style={{
                 justifyContent: "center",
                 alignItems: "flex-start",
-                paddingTop: 30
+                paddingTop: 30,
+                marginBottom: 40
               }}
               onPress={() => this.inputCheck()}
             >

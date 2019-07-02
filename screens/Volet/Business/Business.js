@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Icon, Thumbnail } from "native-base";
 export const { width, height } = Dimensions.get("window");
+import { dev, prod, url } from "../../../config";
 
 export class Business extends Component {
   constructor(props) {
@@ -41,9 +42,46 @@ export class Business extends Component {
             "https://upload.wikimedia.org/wikipedia/en/0/0c/Give_Me_A_Try_single_cover.jpeg",
           title: "Bar"
         }
-      ]
+      ],
+      categoryList: []
     };
   }
+
+  /**
+  |--------------------------------------------------
+  | Implementation of Get Business Categories
+  |--------------------------------------------------
+  */
+
+  componentDidMount = () => {
+    this.addBusiness();
+  };
+
+  addBusiness = () => {
+    let cateArray = [];
+    fetch(`${url}/api/category/`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Get Business Details :", data.categories);
+        if (data.categories.length >= 1) {
+          this.setState({ categoryList: data.categories });
+        }
+      })
+      .catch(error => {
+        Alert.alert(
+          "Error connecting to server",
+          `${error}`,
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+      });
+  };
 
   render() {
     return (
@@ -61,8 +99,8 @@ export class Business extends Component {
         </TouchableOpacity>
         <View>
           <FlatList
-            data={this.state.service}
-            showsHorizontalScrollIndicator={false}
+            data={this.state.categoryList}
+            // showsHorizontalScrollIndicator={false}
             horizontal
             pagingEnabled={true}
             contentContainerStyle={styles.flatlistStyles}
@@ -72,15 +110,18 @@ export class Business extends Component {
                   onPress={() => this.props.navigation.navigate("")}
                   style={styles.imageButton}
                 >
-                  <Thumbnail large source={{ uri: `${item.image}` }} />
-                  <Text>{item.title}</Text>
+                  <Thumbnail large 
+                  // source={{ uri: `${item.image}` }}
+                  style={{backgroundColor:"grey"}}
+                  />
+                  <Text style={{textAlign:"center"}}>{item.title}</Text>
                 </TouchableOpacity>
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
           />
         </View>
-        {this.state.service.map((x, i) => (
+        {/* {this.state.service.map((x, i) => (
           <TouchableOpacity
             key={i}
             style={{
@@ -101,7 +142,7 @@ export class Business extends Component {
             />
             <Text>Krusty Krabs Alantic</Text>
           </TouchableOpacity>
-        ))}
+        ))} */}
       </View>
     );
   }
@@ -122,9 +163,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     paddingLeft: 20
-  },
-  flatlistStyles: {
-    width: width + 5
   },
   imageButton: {
     justifyContent: "space-around",
