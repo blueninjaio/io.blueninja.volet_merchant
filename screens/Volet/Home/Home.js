@@ -39,6 +39,12 @@ export default class App extends React.Component {
       }]
     };
   }
+
+  /**
+  |--------------------------------------------------
+  | Implementation of side bar
+  |--------------------------------------------------
+  */
   showSidebar = () => {
     this.setState({ isVisible: !this.state.isVisible });
   };

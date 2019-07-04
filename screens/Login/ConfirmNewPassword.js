@@ -45,13 +45,13 @@ export class ConfirmNewPassword extends Component {
       })
         .then(res => res.json())
         .then(data => {
-          console.log("Confrim Password :", data);
+          // console.log("Confrim Password :", data);
           if (data.success === true) {
             this.props.navigation.navigate("Login");
           }
         })
         .catch(error => {
-          console.log("Error sign up", error);
+          // console.log("Error sign up", error);
           Alert.alert(
             "Error connecting to server",
             `${error}`,

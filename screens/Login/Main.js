@@ -4,18 +4,117 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage,
+  Alert,
+  Platform
 } from "react-native";
+import { LocalAuthentication, Expo, Constants } from "expo";
 export const { width, height } = Dimensions.get("window");
+import { connect } from "react-redux";
 
 export class Main extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      compatible: false,
+      fingerprints: false,
+      result: "",
+      token: ""
+    };
+  }
+  componentDidMount() {
+    this.checkDeviceForHardware();
+    this.checkForFingerprints();
+    this.getToken();
+  }
+
+  /**
+  |--------------------------------------------------
+  | Implementation of retrieving User Token
+  |--------------------------------------------------
+  */
+  getToken = async () => {
+    try {
+      let value = await AsyncStorage.getItem("token");
+      if (value !== null) {
+        this.setState({ token: value });
+        if (Platform.OS === "android") {
+          this.showAndroidAlert();
+        } else {
+          this.scanFingerprint();
+        }
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error connecting to server",
+        `Please check your internet or try again later`,
+        [{ text: "OK", onPress: () => null }],
+        { cancelable: false }
+      );
+    }
+  };
+
+  /**
+  |--------------------------------------------------
+  | Implementation of Phone Touch ID 
+  |--------------------------------------------------
+  */
+
+  checkDeviceForHardware = async () => {
+    let compatible = await LocalAuthentication.hasHardwareAsync();
+    this.setState({ compatible });
+  };
+
+  checkForFingerprints = async () => {
+    let fingerprints = await LocalAuthentication.isEnrolledAsync();
+    this.setState({ fingerprints });
+  };
+
+  scanFingerprint = async () => {
+    let result = await LocalAuthentication.authenticateAsync(
+      "Scan your finger."
+    );
+    this.login(result.success);
+  };
+
+  login = response => {
+    if (response === true) {
+      this.props.logMeIn();
+    }
+  };
+
+  /**
+  |--------------------------------------------------
+  | Android Touch ID Integration
+  |--------------------------------------------------
+  */
+  showAndroidAlert = () => {
+    Alert.alert(
+      "Fingerprint Scan",
+      "Place your finger over the touch sensor and press scan.",
+      [
+        {
+          text: "Scan",
+          onPress: () => {
+            this.scanFingerprint();
+          }
+        },
+        {
+          text: "Cancel",
+          onPress: () => this.props.navigation.navigate("Login"),
+
+          style: "cancel"
+        }
+      ]
+    );
+  };
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.SignUpView}>
-          <View style={styles.Logo}>
-            {/* <Text>Hello</Text> */}
-          </View>
+          <View style={styles.Logo}>{/* <Text>Hello</Text> */}</View>
           <View style={styles.buttonSignUp}>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("Signup")}
@@ -24,7 +123,11 @@ export class Main extends Component {
               <Text>Sign Up</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Login")}
+              onPress={
+                this.state.token !== ""
+                  ? () => this.getToken()
+                  : () => this.props.navigation.navigate("Login")
+              }
               style={styles.buttonStyle2}
             >
               <Text>Log in</Text>
@@ -36,7 +139,21 @@ export class Main extends Component {
   }
 }
 
-export default Main;
+const mapStateToProps = state => {
+  return {
+    login: state
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logMeIn: () => dispatch({ type: "LOGIN" })
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

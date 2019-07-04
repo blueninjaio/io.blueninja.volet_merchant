@@ -12,8 +12,8 @@ import { Icon, Left, Body, Right } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
 import { connect } from "react-redux";
-
 import { dev, prod, url } from "../../config";
+import { Notifications, Permissions } from "expo";
 
 export class Login extends Component {
   constructor(props) {
@@ -53,6 +53,10 @@ export class Login extends Component {
             this._storeData(data.token).then(() => {
               this.props.logMeIn();
             });
+            // this._storeData(data.token, data.user).then(() => {
+            //   this.registerForPushNotificationsAsync();
+            //   this.props.logMeIn();
+            // });
           } else alert(data.message);
         })
         .catch(err => {
@@ -78,11 +82,55 @@ export class Login extends Component {
     try {
       // console.log("Saving")
       await AsyncStorage.setItem("token", token);
+      // await AsyncStorage.setItem("firstname", userDetails.f_name);
+      // await AsyncStorage.setItem("lastname", userDetails.l_name);
+      // await AsyncStorage.setItem("email", userDetails.email);
+      // await AsyncStorage.setItem("ID", userDetails._id);
+      // await AsyncStorage.setItem("contact", userDetails.contact);
+      // await AsyncStorage.setItem("userType", userDetails.user_type);
       // console.log('Saved')
     } catch (error) {
       alert(error);
     }
   };
+
+  /**
+  |--------------------------------------------------
+  | Implementing Push Notification
+  |--------------------------------------------------
+  */
+
+  // registerForPushNotificationsAsync = async () => {
+  //   const { status: existingStatus } = await Permissions.getAsync(
+  //     Permissions.NOTIFICATIONS
+  //   );
+
+  //   let finalStatus = existingStatus;
+
+  //   if (existingStatus !== "granted") {
+  //     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  //     finalStatus = status;
+  //   }
+
+  //   if (finalStatus !== "granted") {
+  //     return;
+  //   }
+
+  //   let token = await Notifications.getExpoPushTokenAsync();
+
+  //   return fetch(`${url}/api/users/updatePush`, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       token: token,
+  //       email: this.state.email
+  //     })
+  //   });
+  // };
+
   render() {
     return (
       <View style={styles.container}>

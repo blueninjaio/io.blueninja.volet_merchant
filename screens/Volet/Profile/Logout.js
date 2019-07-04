@@ -10,8 +10,14 @@ import {
 export const { width, height } = Dimensions.get("window");
 import { connect } from "react-redux";
 
-
 export class Logout extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: ""
+    };
+  }
 
   /**
   |--------------------------------------------------
@@ -20,6 +26,8 @@ export class Logout extends Component {
   */
   UserSignedOut = async () => {
     try {
+      // let value = await AsyncStorage.clear();
+      // if (value === null || value === undefined) {
       let value = await AsyncStorage.removeItem("token");
       if (value === null) {
         this.props.logMeIn();
@@ -32,6 +40,63 @@ export class Logout extends Component {
         { cancelable: false }
       );
     }
+  };
+
+  /**
+  |--------------------------------------------------
+  | Implementation of retrieving User email 
+  |--------------------------------------------------
+  */
+  // componentDidMount() {
+  //   this.getEmail();
+  // }
+
+  // getEmail = async () => {
+  //   try {
+  //     let value = await AsyncStorage.getItem("email");
+  //     if (value !== null) {
+  //       this.setState({ email: value });
+  //     }
+  //   } catch (error) {
+  //     Alert.alert(
+  //       "Error connecting to server",
+  //       `${error}`,
+  //       [{ text: "OK", onPress: () => null }],
+  //       { cancelable: false }
+  //     );
+  //   }
+  // };
+
+  /**
+|--------------------------------------------------
+| Remove Notification Token
+|--------------------------------------------------
+*/
+  removeNotificationToken = () => {
+    fetch(`${url}/api/users/removePush`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify({
+        email: this.state.email
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success === true) {
+          this.props.logMeIn();
+        }
+      })
+      .catch(error => {
+        Alert.alert(
+          "Error connecting to server",
+          `${error}`,
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+      });
   };
 
   render() {
@@ -49,7 +114,10 @@ export class Logout extends Component {
             <Text>Are you sure you want to log out</Text>
           </View>
           <View>
-            <TouchableOpacity style={{ padding: 20, backgroundColor: "grey" }} onPress={() => this.UserSignedOut()}>
+            <TouchableOpacity
+              style={{ padding: 20, backgroundColor: "grey" }}
+              onPress={() => this.UserSignedOut()}
+            >
               <Text>Yes</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ padding: 20, backgroundColor: "grey" }}>
@@ -84,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     // alignItems: "center"
-    justifyContent: 'center',
+    justifyContent: "center"
   },
   text: {
     color: "#979797",
