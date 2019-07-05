@@ -5,10 +5,12 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from "react-native";
 export const { width, height } = Dimensions.get("window");
 import { connect } from "react-redux";
+import { dev, prod, url } from "../../../config/index";
 
 export class Logout extends Component {
   constructor(props) {
@@ -26,16 +28,18 @@ export class Logout extends Component {
   */
   UserSignedOut = async () => {
     try {
-      // let value = await AsyncStorage.clear();
-      // if (value === null || value === undefined) {
-      let value = await AsyncStorage.removeItem("token");
-      if (value === null) {
-        this.props.logMeIn();
+      let value = await AsyncStorage.clear();
+      console.log("Remove token", value);
+      if (value === null || value === undefined) {
+        // let value = await AsyncStorage.removeItem("token");
+        // if (value === null) {
+        // this.props.logMeIn();
+        this.removeNotificationToken();
       }
     } catch (error) {
       Alert.alert(
         "Error connecting to server",
-        `Please check your internet or try again later`,
+        `${error}`,
         [{ text: "OK", onPress: () => null }],
         { cancelable: false }
       );
@@ -47,25 +51,25 @@ export class Logout extends Component {
   | Implementation of retrieving User email 
   |--------------------------------------------------
   */
-  // componentDidMount() {
-  //   this.getEmail();
-  // }
+  componentDidMount() {
+    this.getEmail();
+  }
 
-  // getEmail = async () => {
-  //   try {
-  //     let value = await AsyncStorage.getItem("email");
-  //     if (value !== null) {
-  //       this.setState({ email: value });
-  //     }
-  //   } catch (error) {
-  //     Alert.alert(
-  //       "Error connecting to server",
-  //       `${error}`,
-  //       [{ text: "OK", onPress: () => null }],
-  //       { cancelable: false }
-  //     );
-  //   }
-  // };
+  getEmail = async () => {
+    try {
+      let value = await AsyncStorage.getItem("email");
+      if (value !== null) {
+        this.setState({ email: value });
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error connecting to server",
+        `${error}`,
+        [{ text: "OK", onPress: () => null }],
+        { cancelable: false }
+      );
+    }
+  };
 
   /**
 |--------------------------------------------------
@@ -73,7 +77,7 @@ export class Logout extends Component {
 |--------------------------------------------------
 */
   removeNotificationToken = () => {
-    fetch(`${url}/api/users/removePush`, {
+    fetch(`${url}/api/merchants/removePush`, {
       method: "POST",
       mode: "cors",
       headers: {
