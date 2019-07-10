@@ -29,18 +29,7 @@ const MySellerAccScreen = ({ tabBar, navigation }) => (
   <SellerAcc navigation={navigation} />
 );
 MySellerAccScreen.navigationOptions = {
-  mode: "card",
-  title: "Business",
-  headerStyle: {
-    backgroundColor: "white"
-  },
-  headerRight: (
-    <TouchableOpacity>
-      <Text>Cancel</Text>
-    </TouchableOpacity>
-  ),
-  // tabBarVisible: false
-
+  header: null
 };
 
 const MyBusinessInfoScreen = ({ navigation }) => (
@@ -121,7 +110,7 @@ const ModalStack = createStackNavigator(
       screen: MyBusinessScreen
     },
     SellerAcc: {
-      screen: MySellerAccScreen,
+      screen: MySellerAccScreen
       // navigationOptions: {
       //   gesturesEnabled: false,
       //   tabBarVisible: false

@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  AsyncStorage
 } from "react-native";
 import { Icon, Thumbnail } from "native-base";
 export const { width, height } = Dimensions.get("window");
@@ -16,33 +17,12 @@ export class Business extends Component {
     super(props);
 
     this.state = {
-      service: [
-        {
-          image:
-            "https://upload.wikimedia.org/wikipedia/en/0/0c/Give_Me_A_Try_single_cover.jpeg",
-          title: "Restaurants"
-        },
-        {
-          image:
-            "https://upload.wikimedia.org/wikipedia/en/0/0c/Give_Me_A_Try_single_cover.jpeg",
-          title: "Shop"
-        },
-        {
-          image:
-            "https://upload.wikimedia.org/wikipedia/en/0/0c/Give_Me_A_Try_single_cover.jpeg",
-          title: "Stall"
-        },
-        {
-          image:
-            "https://upload.wikimedia.org/wikipedia/en/0/0c/Give_Me_A_Try_single_cover.jpeg",
-          title: "Movie"
-        },
-        {
-          image:
-            "https://upload.wikimedia.org/wikipedia/en/0/0c/Give_Me_A_Try_single_cover.jpeg",
-          title: "Bar"
-        }
-      ],
+      firstName: "",
+      lastName: "",
+      email: "",
+      contact: "",
+      id: "",
+      service: [],
       categoryList: []
     };
   }
@@ -55,6 +35,24 @@ export class Business extends Component {
 
   componentDidMount = () => {
     this.addBusiness();
+    this.getUserInfo();
+  };
+
+  getUserInfo = async () => {
+    try {
+      let email = await AsyncStorage.getItem("email");
+      if (email !== null) {
+        this.setState({ email });
+        this.getMerchantBusiness(email)
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error connecting to server",
+        `Please check your internet or try again later`,
+        [{ text: "OK", onPress: () => null }],
+        { cancelable: false }
+      );
+    }
   };
 
   addBusiness = () => {
@@ -71,6 +69,34 @@ export class Business extends Component {
         console.log("Get Business Details :", data.categories);
         if (data.categories.length >= 1) {
           this.setState({ categoryList: data.categories });
+        }
+      })
+      .catch(error => {
+        Alert.alert(
+          "Error connecting to server",
+          `${error}`,
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+      });
+  };
+
+  getMerchantBusiness = (email) => {
+    fetch(`${url}/api/business/merchant/email`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify({
+        email: email
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Get Merchant Business :", data);
+        if (data.success === true){
+          this.setState({service: data.businesses})
         }
       })
       .catch(error => {
@@ -110,18 +136,19 @@ export class Business extends Component {
                   onPress={() => this.props.navigation.navigate("")}
                   style={styles.imageButton}
                 >
-                  <Thumbnail large 
-                  // source={{ uri: `${item.image}` }}
-                  style={{backgroundColor:"grey"}}
+                  <Thumbnail
+                    large
+                    // source={{ uri: `${item.image}` }}
+                    style={{ backgroundColor: "grey" }}
                   />
-                  <Text style={{textAlign:"center"}}>{item.title}</Text>
+                  <Text style={{ textAlign: "center" }}>{item.title}</Text>
                 </TouchableOpacity>
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
           />
         </View>
-        {/* {this.state.service.map((x, i) => (
+        {this.state.service.map((item, i) => (
           <TouchableOpacity
             key={i}
             style={{
@@ -133,16 +160,19 @@ export class Business extends Component {
               marginTop: 10,
               marginBottom: 10
             }}
-            onPress={() => this.props.navigation.navigate("BusinessEdit")}
+            onPress={() => this.props.navigation.navigate("BusinessEdit",{
+              businessID: item._id,
+              businessInfo: this.state.service
+            })}
           >
             <Thumbnail
               small
-              source={{ uri: `${x.image}` }}
+              source={{ uri: `${item.image}` }}
               style={{ backgroundColor: "grey" }}
             />
-            <Text>Krusty Krabs Alantic</Text>
+            <Text>{item.company_name}</Text>
           </TouchableOpacity>
-        ))} */}
+        ))}
       </View>
     );
   }

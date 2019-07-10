@@ -108,6 +108,7 @@ export class BusinessInfo extends Component {
 
   render() {
     const dropDownValue = this.createData();
+    
     return (
       <View styles={styles.container}>
         <ScrollView>

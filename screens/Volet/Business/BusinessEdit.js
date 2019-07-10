@@ -8,11 +8,16 @@ import {
   FlatList,
   Picker,
   TextInput,
-  ScrollView
+  ScrollView,
+  Alert
 } from "react-native";
 import { Icon, Thumbnail } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
+import DatePicker from "react-native-datepicker";
 export const { width, height } = Dimensions.get("window");
+import { Dropdown } from "react-native-material-dropdown";
+import { dev, prod, url } from "../../../config";
+import { ImagePicker, Permissions } from "expo";
 
 export class BusinessEdit extends Component {
   constructor(props) {
@@ -27,11 +32,200 @@ export class BusinessEdit extends Component {
       businessType: "",
       selectedProducts: null,
       isEndTimePickerVisible: false,
-      isStartTimePickerVisible:false,
+      isStartTimePickerVisible: false,
       startTime: new Date(),
-      endTime: new Date()
+      endTime: new Date(),
+      businessList: [],
+      image: "",
+      price: "",
+      productName: "",
+      producttDesc: "",
+      businessItems: [],
+      editProduct: "",
+      editProductPrice: ""
     };
   }
+
+  /**
+  |--------------------------------------------------
+  | Implementing Dropdown list
+  |--------------------------------------------------
+  */
+  createData() {
+    return this.state.businessList.map(el => ({
+      value: el
+    }));
+  }
+
+  /**
+  |--------------------------------------------------
+  | Implementing Permission Requst for Image picker
+  |--------------------------------------------------
+  */
+  getPermissionAsync = async () => {
+    const permission = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+    if (permission.status !== "granted") {
+      const newPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (newPermission.status === "granted") {
+        //its granted.
+      }
+    }
+  };
+
+  /**
+|--------------------------------------------------
+| Image Picker Implementation
+|--------------------------------------------------
+*/
+  _onChoosePic = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3]
+    });
+    console.log("Image link", result); // this logs correctly
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+      // TODO: why isn't this showing up inside the Image on screen?
+    }
+  };
+
+  /**
+  |--------------------------------------------------
+  | Implementation of get Business Categories
+  |--------------------------------------------------
+  */
+  componentDidMount = () => {
+    this.getBusinessItem();
+    this.getPermissionAsync();
+    console.log("Business id", this.props.navigation.state.params.businessID);
+  };
+
+  getBusinessItem = () => {
+    fetch(`${url}/api/item/business`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify({
+        business_id: this.props.navigation.state.params.businessID
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Item data", data);
+        if (data.success === true) {
+          this.setState({ businessItems: data.item });
+        }
+        else{
+          alert(data.message)
+        }
+      })
+      .catch(error => {
+        Alert.alert(
+          "Error connecting to server",
+          `${error}`,
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+      });
+  };
+
+  deleteProduct = id => {
+    fetch(`${url}/api/item/remove`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify({
+        _id: id
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Item data", data);
+        if (data.success === true) {
+          Alert.alert(
+            "Succes",
+            `${data.message}`,
+            [
+              {
+                text: "OK",
+                onPress: () => {
+                    this.getBusinessItem(),
+                    this.products(null)
+                }
+              }
+            ],
+            { cancelable: false }
+          );
+        }
+        else{
+          alert(data.message)
+        }
+      })
+      .catch(error => {
+        Alert.alert(
+          "Error connecting to server",
+          `${error}`,
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+      });
+  };
+
+  addBusinessItem = () => {
+    let splitPrice = this.state.price.split(".");
+    fetch(`${url}/api/item/add`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify({
+        business_id: this.props.navigation.state.params.businessID,
+        name: this.state.productName,
+        description: this.state.producttDesc,
+        price: { value: splitPrice[0], decimal: splitPrice[1] }
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Item data", data);
+        if (data.success === true) {
+          Alert.alert(
+            "Success",
+            `${data.message}`,
+            [
+              {
+                text: "OK",
+                onPress: () => {
+                  // this.props.navigation.navigate("Business"),
+                    this.getBusinessItem(),
+                    this.products(null),
+                    this.setState({productName:""})
+                    this.setState({producttDesc:""})
+                    this.setState({price:""})
+                }
+              }
+            ],
+            { cancelable: false }
+          );
+        }
+        else{
+          alert(data.message)
+        }
+      })
+      .catch(error => {
+        Alert.alert(
+          "Error connecting to server",
+          `${error}`,
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+      });
+  };
 
   Onclick = value => {
     this.setState({ selectedValue: value });
@@ -41,35 +235,30 @@ export class BusinessEdit extends Component {
     this.setState({ selectedProducts: value });
   };
 
-  showStartTimePicker = () => {
-    this.setState({ isStartTimePickerVisible: true });
+  handleInputChange = text => {
+    if (text.indexOf(".") == -1) {
+      this.setState({
+        price: text
+      });
+    } else if (text.indexOf(".") >= 1) {
+      if (text.split(".")[1].length > 2) {
+        this.setState({ price: parseFloat(text).toFixed(2) });
+      } else {
+        this.setState({ price: text });
+      }
+    }
   };
 
-  hideStartTimePicker = () => {
-    this.setState({ isStartTimePickerVisible: false });
-  };
-
-  handleStartPicked = date => {
-    console.log("A date has been picked: ", date);
-    this.setState({ startTime: date });
-    this.hideStartTimePicker();
-  };
-
-  showEndTimePicker = () => {
-    this.setState({ isEndTimePickerVisible: true });
-  };
-
-  hideEndTimePicker = () => {
-    this.setState({ isEndTimePickerVisible: false });
-  };
-
-  handleEndPicked = date => {
-    console.log("A date has been picked: ", date);
-    this.setState({ endTime: date });
-    this.hideEndTimePicker();
+  editProduct = x => {
+    this.setState({ selectedProducts: "EditProduct" });
+    console.log("To be edited product", x);
+    let price = x.price.value + "." + x.price.decimal;
+    this.setState({ editProduct: x });
+    this.setState({ editProductPrice: price });
   };
 
   render() {
+    const dropDownValue = this.createData();
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -128,7 +317,16 @@ export class BusinessEdit extends Component {
           {this.state.selectedValue === "Store" ? (
             <View style={{ justifyContent: "center", alignItems: "center" }}>
               <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <Thumbnail large style={{ backgroundColor: "grey" }} />
+                {this.state.image === "" ? (
+                  <Thumbnail large style={{ backgroundColor: "grey" }} />
+                ) : (
+                  <Thumbnail
+                    large
+                    source={{ uri: `${this.state.image}` }}
+                    style={{ backgroundColor: "grey" }}
+                  />
+                )}
+
                 <TouchableOpacity
                   style={{
                     flexDirection: "row",
@@ -224,22 +422,19 @@ export class BusinessEdit extends Component {
                   paddingTop: 30
                 }}
               >
-                <Text>Type Of Business</Text>
-                <Picker
-                  selectedValue={this.state.businessType}
-                  style={{
-                    height: 170,
-                    width: width / 1.5,
-                    backgroundColor: "grey"
+                <Text>Type of Business</Text>
+                <Dropdown
+                  data={dropDownValue}
+                  label="Select"
+                  containerStyle={{
+                    // height: 170,
+                    width: width / 1.5
                   }}
-                  onValueChange={(itemValue, itemIndex) =>
-                    this.setState({ businessType: itemValue })
-                  }
-                >
-                  <Picker.Item label="Food and Beverage" value="fab" />
-                  <Picker.Item label="Shop" value="shop" />
-                  <Picker.Item label="Cold Drinks" value="drinks" />
-                </Picker>
+                  dropdownMargins={{ min: 8, max: 16 }}
+                  onChangeText={value => {
+                    this.setState({ businessType: value });
+                  }}
+                />
               </View>
               <View
                 style={{
@@ -249,29 +444,26 @@ export class BusinessEdit extends Component {
                 }}
               >
                 <Text>Business Catergory</Text>
-                <Picker
-                  selectedValue={this.state.businessCategory}
-                  style={{
-                    height: 170,
-                    width: width / 1.5,
-                    backgroundColor: "grey"
+                <Dropdown
+                  data={dropDownValue}
+                  label="Select"
+                  containerStyle={{
+                    // height: 170,
+                    width: width / 1.5
                   }}
-                  onValueChange={(itemValue, itemIndex) =>
-                    this.setState({ businessCategory: itemValue })
-                  }
-                >
-                  <Picker.Item label="Food and Beverage" value="fab" />
-                  <Picker.Item label="Shop" value="shop" />
-                  <Picker.Item label="Cold Drinks" value="drinks" />
-                </Picker>
+                  dropdownMargins={{ min: 8, max: 16 }}
+                  onChangeText={value => {
+                    this.setState({ businessType: value });
+                  }}
+                />
               </View>
               <View
                 style={{
                   justifyContent: "center",
                   alignItems: "flex-start",
                   paddingTop: 30,
-                //   backgroundColor:"pink",
-                  width: width/ 1.4
+                  //   backgroundColor:"pink",
+                  width: width / 1.4
                 }}
               >
                 <Text>Opening Hours</Text>
@@ -280,8 +472,7 @@ export class BusinessEdit extends Component {
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "space-between",
-                  width: width/ 1.4
-
+                    width: width / 1.4
                   }}
                 >
                   <Text>Sun</Text>
@@ -293,29 +484,31 @@ export class BusinessEdit extends Component {
                       width: width / 1.4
                     }}
                   >
-                    <TouchableOpacity onPress={this.showStartTimePicker} style={{padding: 20, }}>
-                      <Text>start time</Text>
-                    </TouchableOpacity>
-                    <DateTimePicker
-                      mode={"time"}
+                    <DatePicker
+                      style={{ width: 100 }}
                       date={this.state.startTime}
-                      isVisible={this.state.isStartTimePickerVisible}
-                      onConfirm={this.handleStartPicked}
-                      onCancel={this.hideStartTimePicker}
-                      // onDateChange={startTime => this.setState({ startTime })}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select date"
+                      // format="YYYY-MM-DD"
+                      // minDate={new Date()}
+                      // maxDate="2025-01-01"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time => this.setState({ startTime: time })}
                     />
-                    <TouchableOpacity onPress={this.showEndTimePicker} style={{padding: 20,}}>
-                      <Text>End time</Text>
-
-                    </TouchableOpacity>
-                    <DateTimePicker
-                      mode={"time"}
+                    <DatePicker
+                      style={{ width: 100 }}
                       date={this.state.endTime}
-                      isVisible={this.state.isEndTimePickerVisible}
-                      onConfirm={this.handleEndPicked}
-                      onCancel={this.hideEndTimePicker}
-                      // onDateChange={endTime => this.setState({ endTime })}
-
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select time"
+                      // format="HH-MM-SS"
+                      // minDate={new Date()}
+                      // maxDate="2025-01-01"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time => this.setState({ endTime: time })}
                     />
                   </View>
                 </View>
@@ -384,15 +577,28 @@ export class BusinessEdit extends Component {
                   <View
                     style={{ justifyContent: "center", alignItems: "center" }}
                   >
-                    <Thumbnail
-                      large
-                      square
-                      style={{
-                        backgroundColor: "grey",
-                        width: width / 1.5,
-                        height: height / 6
-                      }}
-                    />
+                    {this.state.image === "" ? (
+                      <Thumbnail
+                        large
+                        square
+                        style={{
+                          backgroundColor: "grey",
+                          width: width / 1.5,
+                          height: height / 6
+                        }}
+                      />
+                    ) : (
+                      <Thumbnail
+                        large
+                        source={{ uri: `${this.state.image}` }}
+                        square
+                        style={{
+                          backgroundColor: "grey",
+                          width: width / 1.5,
+                          height: height / 5
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       style={{
                         flexDirection: "row",
@@ -400,6 +606,7 @@ export class BusinessEdit extends Component {
                         alignItems: "center",
                         width: width / 4
                       }}
+                      onPress={() => this._onChoosePic()}
                     >
                       <Icon name="ios-add-circle-outline" type="Ionicons" />
 
@@ -450,7 +657,7 @@ export class BusinessEdit extends Component {
                           width: width / 1.2,
                           paddingLeft: 20,
                           // borderRadius: 20,
-                          height: 50,
+                          height: 100,
                           color: "rgb(74,74,74)",
                           backgroundColor: "rgb(226,226,226)"
                         }}
@@ -476,26 +683,192 @@ export class BusinessEdit extends Component {
                           alignSelf: "center",
                           width: width / 1.2,
                           paddingLeft: 20,
+                          height: 50,
+                          color: "rgb(74,74,74)",
+                          backgroundColor: "rgb(226,226,226)"
+                        }}
+                        // onChangeText={price => this.setState({ price })}
+                        onChangeText={this.handleInputChange}
+                        value={this.state.price}
+                        type="number"
+                        keyboardType="numeric"
+                        placeholder="MYR"
+                        placeholderTextColor="rgb(74,74,74)"
+                        // maxLength={6}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "space-around",
+                        alignItems: "center",
+                        height: height / 4
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{ backgroundColor: "grey", padding: 20 }}
+                        onPress={() => this.addBusinessItem()}
+                      >
+                        <Text>Save</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => this.deleteProduct()}>
+                        <Text>Delete Product</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              ) : this.state.selectedProducts === "EditProduct" ? (
+                <View>
+                  <View style={{ paddingLeft: 20 }}>
+                    <TouchableOpacity
+                      onPress={() => this.products("FeaturedProducts")}
+                    >
+                      <Text> {`<`} Back </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    {this.state.image === "" ? (
+                      <Thumbnail
+                        large
+                        square
+                        style={{
+                          backgroundColor: "grey",
+                          width: width / 1.5,
+                          height: height / 6
+                        }}
+                      />
+                    ) : (
+                      <Thumbnail
+                        large
+                        source={{ uri: `${this.state.image}` }}
+                        square
+                        style={{
+                          backgroundColor: "grey",
+                          width: width / 1.5,
+                          height: height / 5
+                        }}
+                      />
+                    )}
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: width / 4
+                      }}
+                      onPress={() => this._onChoosePic()}
+                    >
+                      <Icon name="ios-add-circle-outline" type="Ionicons" />
+
+                      <Text>Add Images</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                        paddingTop: 30
+                      }}
+                    >
+                      <Text>Product Name</Text>
+                      <TextInput
+                        style={{
+                          alignSelf: "center",
+                          width: width / 1.2,
+                          paddingLeft: 20,
                           // borderRadius: 20,
                           height: 50,
                           color: "rgb(74,74,74)",
                           backgroundColor: "rgb(226,226,226)"
                         }}
-                        onChangeText={price => this.setState({ price })}
-                        value={this.state.price}
-                        type="number"
-                        placeholder="MYR"
+                        // onChangeText={productName =>
+                        //   this.setState({ productName })
+                        // }
+                        value={this.state.editProduct.name}
+                        type="text"
+                        placeholder="Product name"
                         placeholderTextColor="rgb(74,74,74)"
                       />
                     </View>
-                    <TouchableOpacity
-                      style={{ backgroundColor: "grey", padding: 20 }}
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                        paddingTop: 30
+                      }}
                     >
-                      <Text>Save</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Text>Delete Product</Text>
-                    </TouchableOpacity>
+                      <Text>Product Description</Text>
+                      <TextInput
+                        style={{
+                          alignSelf: "center",
+                          width: width / 1.2,
+                          paddingLeft: 20,
+                          // borderRadius: 20,
+                          height: 100,
+                          color: "rgb(74,74,74)",
+                          backgroundColor: "rgb(226,226,226)"
+                        }}
+                        // onChangeText={producttDesc =>
+                        //   this.setState({ producttDesc })
+                        // }
+                        value={this.state.editProduct.description}
+                        type="text"
+                        placeholder="Product Description"
+                        placeholderTextColor="rgb(74,74,74)"
+                      />
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                        paddingTop: 30
+                      }}
+                    >
+                      <Text>Price</Text>
+                      <TextInput
+                        style={{
+                          alignSelf: "center",
+                          width: width / 1.2,
+                          paddingLeft: 20,
+                          height: 50,
+                          color: "rgb(74,74,74)",
+                          backgroundColor: "rgb(226,226,226)"
+                        }}
+                        // onChangeText={price => this.setState({ price })}
+                        // onChangeText={this.handleInputChange}
+                        value={this.state.editProductPrice}
+                        type="number"
+                        keyboardType="numeric"
+                        placeholder="MYR"
+                        placeholderTextColor="rgb(74,74,74)"
+                        // maxLength={6}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "space-around",
+                        alignItems: "center",
+                        height: height / 4
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{ backgroundColor: "grey", padding: 20 }}
+                        // onPress={() => this.addBusinessItem()}
+                      >
+                        <Text>Save</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.deleteProduct(this.state.editProduct._id)
+                        }
+                      >
+                        <Text>Delete Product</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               ) : (
@@ -519,25 +892,37 @@ export class BusinessEdit extends Component {
                     </View>
                   </View>
 
-                  <TouchableOpacity
-                    style={{
-                      flexDirection: "row",
-                      borderWidth: 1,
-                      borderColor: "#ddd",
-                      alignItems: "center",
-                      padding: 10,
-                      marginTop: 10,
-                      marginBottom: 10
-                    }}
-                    onPress={() => this.products("AddProduct")}
+                  {this.state.businessItems.map((x, i) => (
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: "row",
+                        borderWidth: 1,
+                        borderColor: "#ddd",
+                        alignItems: "center",
+                        padding: 10,
+                        marginTop: 10,
+                        marginBottom: 10
+                      }}
+                      onPress={() => this.editProduct(x)}
+                      key={i}
+                    >
+                      <Thumbnail
+                        small
+                        // source={{ uri: `` }}
+                        style={{ backgroundColor: "grey" }}
+                      />
+                      <Text>{x.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
                   >
-                    <Thumbnail
-                      small
-                      // source={{ uri: `` }}
-                      style={{ backgroundColor: "grey" }}
-                    />
-                    <Text>Krabby Patty</Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => this.products("AddProduct")}
+                    >
+                      <Icon name="ios-add-circle-outline" type="Ionicons" />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               )}
             </View>
