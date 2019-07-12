@@ -9,7 +9,8 @@ import {
   Picker,
   TextInput,
   ScrollView,
-  Alert
+  Alert,
+  AsyncStorage
 } from "react-native";
 import { Icon, Thumbnail } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -33,8 +34,8 @@ export class BusinessEdit extends Component {
       selectedProducts: null,
       isEndTimePickerVisible: false,
       isStartTimePickerVisible: false,
-      startTime: new Date(),
-      endTime: new Date(),
+      // startTime: new Date(),
+      // endTime: new Date(),
       businessList: [],
       image: "",
       price: "",
@@ -42,9 +43,55 @@ export class BusinessEdit extends Component {
       producttDesc: "",
       businessItems: [],
       editProduct: "",
-      editProductPrice: ""
+      editProductPrice: "",
+      sunStartTime: new Date(),
+      sunEndTime: new Date(),
+      monStartTime: new Date(),
+      monEndTime: new Date(),
+      tueStartTime: new Date(),
+      tueEndTime: new Date(),
+      wedStartTime: new Date(),
+      wedEndTime: new Date(),
+      thurStartTime: new Date(),
+      thurEndTime: new Date(),
+      friStartTime: new Date(),
+      friEndTime: new Date(),
+      satStartTime: new Date(),
+      satEndTime: new Date()
     };
   }
+
+  /**
+  |--------------------------------------------------
+  | Implementation of get Business Categories
+  |--------------------------------------------------
+  */
+  getBusiness = () => {
+    let cateArray = [];
+    fetch(`${url}/api/category/`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.categories.length >= 1) {
+          data.categories.map(x => cateArray.push(x.title));
+          this.setState({ businessList: cateArray });
+          // console.log("catearray", cateArray);
+        }
+      })
+      .catch(error => {
+        Alert.alert(
+          "Error connecting to server",
+          `${error}`,
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+      });
+  };
 
   /**
   |--------------------------------------------------
@@ -97,6 +144,7 @@ export class BusinessEdit extends Component {
   componentDidMount = () => {
     this.getBusinessItem();
     this.getPermissionAsync();
+    this.getBusiness();
     console.log("Business id", this.props.navigation.state.params.businessID);
   };
 
@@ -116,9 +164,60 @@ export class BusinessEdit extends Component {
         console.log("Item data", data);
         if (data.success === true) {
           this.setState({ businessItems: data.item });
+        } else {
+          alert(data.message);
         }
-        else{
-          alert(data.message)
+      })
+      .catch(error => {
+        Alert.alert(
+          "Error connecting to server",
+          `${error}`,
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+      });
+  };
+
+  addBusinessInfo = () => {
+    console.log("time", this.state.sunStartTime)
+    fetch(`${url}/api/business/info`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify({
+        _id: this.props.navigation.state.params.businessID,
+        store_name: this.state.storeName,
+        store_number: this.state.storeNumber,
+        store_description: this.state.storeDesc,
+        sunday: { start: this.state.sunStartTime, end: this.state.sunEndTime },
+        monday: { start: this.state.monStartTime, end: this.state.monEndTime },
+        tuesday: { start: this.state.tueStartTime, end: this.state.tueEndTime },
+        wednesday: { start: this.state.wedStartTime, end: this.state.wedEndTime },
+        thursday: { start: this.state.thurStartTime, end: this.state.thurEndTime },
+        friday: { start: this.state.friStartTime, end: this.state.friEndTime },
+        saturday: { start: this.state.satStartTime, end: this.state.satEndTime }
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Business Info", data);
+        if (data.success === true) {
+          Alert.alert(
+            "Success",
+            `${data.message}`,
+            [
+              {
+                text: "OK",
+                onPress: () => this.props.navigation.navigate("Business")
+              }
+            ],
+            { cancelable: false }
+          );
+          // this.setState({ businessItems: data.item });
+        } else {
+          alert(data.message);
         }
       })
       .catch(error => {
@@ -153,16 +252,14 @@ export class BusinessEdit extends Component {
               {
                 text: "OK",
                 onPress: () => {
-                    this.getBusinessItem(),
-                    this.products(null)
+                  this.getBusinessItem(), this.products(null);
                 }
               }
             ],
             { cancelable: false }
           );
-        }
-        else{
-          alert(data.message)
+        } else {
+          alert(data.message);
         }
       })
       .catch(error => {
@@ -202,19 +299,18 @@ export class BusinessEdit extends Component {
                 text: "OK",
                 onPress: () => {
                   // this.props.navigation.navigate("Business"),
-                    this.getBusinessItem(),
+                  this.getBusinessItem(),
                     this.products(null),
-                    this.setState({productName:""})
-                    this.setState({producttDesc:""})
-                    this.setState({price:""})
+                    this.setState({ productName: "" });
+                  this.setState({ producttDesc: "" });
+                  this.setState({ price: "" });
                 }
               }
             ],
             { cancelable: false }
           );
-        }
-        else{
-          alert(data.message)
+        } else {
+          alert(data.message);
         }
       })
       .catch(error => {
@@ -486,41 +582,292 @@ export class BusinessEdit extends Component {
                   >
                     <DatePicker
                       style={{ width: 100 }}
-                      date={this.state.startTime}
+                      date={this.state.sunStartTime}
                       mode="time"
                       showIcon={false}
                       placeholder="select date"
-                      // format="YYYY-MM-DD"
-                      // minDate={new Date()}
-                      // maxDate="2025-01-01"
                       confirmBtnText="Confirm"
                       cancelBtnText="Cancel"
-                      onDateChange={time => this.setState({ startTime: time })}
+                      onDateChange={time =>
+                        this.setState({ sunStartTime: time })
+                      }
                     />
                     <DatePicker
                       style={{ width: 100 }}
-                      date={this.state.endTime}
+                      date={this.state.sunEndTime}
                       mode="time"
                       showIcon={false}
                       placeholder="select time"
-                      // format="HH-MM-SS"
-                      // minDate={new Date()}
-                      // maxDate="2025-01-01"
                       confirmBtnText="Confirm"
                       cancelBtnText="Cancel"
-                      onDateChange={time => this.setState({ endTime: time })}
+                      onDateChange={time => this.setState({ sunEndTime: time })}
+                    />
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: width / 1.4,
+                    marginTop: 20
+                  }}
+                >
+                  <Text>Mon</Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                      width: width / 1.4
+                    }}
+                  >
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.monStartTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select date"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time =>
+                        this.setState({ monStartTime: time })
+                      }
+                    />
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.monEndTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select time"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time => this.setState({ monEndTime: time })}
+                    />
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: width / 1.4,
+                    marginTop: 20
+                  }}
+                >
+                  <Text>Tue</Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                      width: width / 1.4
+                    }}
+                  >
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.tueStartTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select date"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time =>
+                        this.setState({ tueStartTime: time })
+                      }
+                    />
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.tueEndTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select time"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time => this.setState({ tueEndTime: time })}
+                    />
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: width / 1.4,
+                    marginTop: 20
+                  }}
+                >
+                  <Text>Wed</Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                      width: width / 1.4
+                    }}
+                  >
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.wedStartTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select date"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time =>
+                        this.setState({ wedStartTime: time })
+                      }
+                    />
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.wedEndTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select time"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time => this.setState({ wedEndTime: time })}
+                    />
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: width / 1.4,
+                    marginTop: 20
+                  }}
+                >
+                  <Text>Thurs</Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                      width: width / 1.4
+                    }}
+                  >
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.thurStartTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select date"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time =>
+                        this.setState({ thurStartTime: time })
+                      }
+                    />
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.thurEndTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select time"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time =>
+                        this.setState({ thurEndTime: time })
+                      }
+                    />
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: width / 1.4,
+                    marginTop: 20
+                  }}
+                >
+                  <Text>Fri</Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                      width: width / 1.4
+                    }}
+                  >
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.friStartTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select date"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time =>
+                        this.setState({ friStartTime: time })
+                      }
+                    />
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.friEndTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select time"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time => this.setState({ friEndTime: time })}
+                    />
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: width / 1.4,
+                    marginTop: 20
+                  }}
+                >
+                  <Text>Sat</Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                      width: width / 1.4
+                    }}
+                  >
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.satStartTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select date"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time =>
+                        this.setState({ satStartTime: time })
+                      }
+                    />
+                    <DatePicker
+                      style={{ width: 100 }}
+                      date={this.state.satEndTime}
+                      mode="time"
+                      showIcon={false}
+                      placeholder="select time"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={time => this.setState({ satEndTime: time })}
                     />
                   </View>
                 </View>
               </View>
               <TouchableOpacity
-                style={{ backgroundColor: "grey", padding: 20 }}
+                onPress={() => this.addBusinessInfo()}
+                style={{ backgroundColor: "grey", padding: 20, marginTop: 50 }}
               >
                 <Text>Save</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              {/* <TouchableOpacity>
                 <Text>Delete Product</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           ) : (
             <View>

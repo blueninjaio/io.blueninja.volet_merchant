@@ -8,18 +8,63 @@ import {
   ScrollView,
   StatusBar,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage,
+  Alert
 } from "react-native";
 import { LinearGradient } from "expo";
+import { NavigationEvents } from "react-navigation";
 
 export class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: "",
+      id: "",
+      contact: ""
+    };
+  }
+
+  /**
+|--------------------------------------------------
+| Get Volet balance
+|--------------------------------------------------
+*/
+  componentDidMount = () => {
+    this.getUserID();
+  };
+
+  getUserID = async () => {
+    try {
+      let id = await AsyncStorage.getItem("ID");
+      let username = await AsyncStorage.getItem("firstname");
+      let contact = await AsyncStorage.getItem("contact");
+
+      if (id !== null) {
+        this.setState({ id });
+        this.setState({ username });
+        this.setState({ contact });
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error connecting to server storage",
+        `${error}`,
+        [{ text: "OK", onPress: () => null }],
+        { cancelable: false }
+      );
+    }
+  };
+
   render() {
     return (
       <View style={styles.container}>
         <StatusBar />
         <ScrollView>
           <LinearGradient colors={["#36D1DC", "#5B86E5"]} style={styles.header}>
-            <Text style={{ color: "white", fontSize: 18 }}>User Profile</Text>
+            <Text style={{ color: "white", fontSize: 18 }}>
+              Merchant Profile
+            </Text>
           </LinearGradient>
           <View style={styles.userDetails}>
             <Image
@@ -39,15 +84,10 @@ export class Profile extends React.Component {
               <Text
                 style={{ fontWeight: "bold", fontSize: 17, marginLeft: 10 }}
               >
-                Fa Mulan
+                {this.state.username}
               </Text>
-              <Image
-                source={require("../../../assets/check.png")}
-                resizeMode="contain"
-                style={{ width: 15, height: 15, marginLeft: 10 }}
-              />
             </View>
-            <Text style={{ paddingTop: 10 }}>+0123345678</Text>
+            <Text style={{ paddingTop: 10 }}>+{this.state.contact}</Text>
           </View>
           <View style={styles.voletContainer}>
             <LinearGradient

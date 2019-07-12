@@ -9,7 +9,9 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
-  TouchableHighlight
+  TouchableHighlight,
+  AsyncStorage,
+  Alert
 } from "react-native";
 import {
   Header,
@@ -30,15 +32,45 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      user: "Fa Mulan",
+      username: "",
       isVisible: false,
-      notificationList:[{
-        title:"Received by RM 50 from Someone"
-      },{
-        title:"Sent RM 50 to Someone"
-      }]
+      notificationList: [
+        {
+          title: "Received by RM 50 from Someone"
+        },
+        {
+          title: "Sent RM 50 to Someone"
+        }
+      ]
     };
   }
+
+  /**
+|--------------------------------------------------
+| Get Volet balance
+|--------------------------------------------------
+*/
+  componentDidMount = () => {
+    this.getUserID();
+  };
+
+  getUserID = async () => {
+    try {
+      let id = await AsyncStorage.getItem("ID");
+      let username = await AsyncStorage.getItem("firstname");
+      if (id !== null) {
+        this.setState({ id });
+        this.setState({ username });
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error connecting to server storage",
+        `${error}`,
+        [{ text: "OK", onPress: () => null }],
+        { cancelable: false }
+      );
+    }
+  };
 
   /**
   |--------------------------------------------------
@@ -93,7 +125,7 @@ export default class App extends React.Component {
                   color: "white"
                 }}
               >
-                {this.state.user}
+                {this.state.username}
               </Text>
             </View>
           </LinearGradient>
