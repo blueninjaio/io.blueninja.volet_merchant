@@ -6,22 +6,23 @@ import {
   Dimensions,
   ScrollView,
   AsyncStorage,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
 import { Icon, Left, Body, Right } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
 import { connect } from "react-redux";
-
 import { dev, prod, url } from "../../config";
+import { Notifications, Permissions } from "expo";
 
 export class Login extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: "dev_apple@blueninja.io",
-      password: "12345678"
+      email: "",
+      password: ""
     };
   }
 
@@ -50,8 +51,8 @@ export class Login extends Component {
         .then(data => {
           console.log("Fetch Data: ", data);
           if (data.success) {
-            this._storeData(data.token).then(() => {
-              this.props.logMeIn();
+            this._storeData(data.token, data.merchant).then(() => {
+              this.registerForPushNotificationsAsync();
             });
           } else alert(data.message);
         })
@@ -74,15 +75,58 @@ export class Login extends Component {
   | Store Token to Async Storage
   |--------------------------------------------------
   */
-  _storeData = async token => {
+  _storeData = async (token, userDetails) => {
     try {
       // console.log("Saving")
       await AsyncStorage.setItem("token", token);
-      // console.log('Saved')
+      await AsyncStorage.setItem("firstname", userDetails.f_name);
+      await AsyncStorage.setItem("lastname", userDetails.l_name);
+      await AsyncStorage.setItem("email", userDetails.email);
+      await AsyncStorage.setItem("ID", userDetails._id);
+      await AsyncStorage.setItem("contact", userDetails.contact);
+      await this.props.logMeIn();
     } catch (error) {
       alert(error);
     }
   };
+
+  /**
+  |--------------------------------------------------
+  | Implementing Push Notification
+  |--------------------------------------------------
+  */
+
+  registerForPushNotificationsAsync = async () => {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== "granted") {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+
+    if (finalStatus !== "granted") {
+      return;
+    }
+
+    let token = await Notifications.getExpoPushTokenAsync();
+
+    return fetch(`${url}/api/merchants/updatePush`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        token: token,
+        email: this.state.email
+      })
+    });
+  };
+
   render() {
     return (
       <View style={styles.container}>

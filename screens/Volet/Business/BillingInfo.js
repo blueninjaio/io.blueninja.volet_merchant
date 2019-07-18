@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
+import { Dropdown } from "react-native-material-dropdown";
 
 export class BillingInfo extends Component {
   constructor(props) {
@@ -24,10 +25,12 @@ export class BillingInfo extends Component {
       billingAddress: "",
       postalCode: "",
       states: "",
-      country: ""
+      country: "",
+      bankList: ["Maybank", "CIMB", "RHB"],
+      currencyList: ["MYR", "Baht", "Rupee"],
+      paymentList:["Autopay", "PayPal", "Credit"]
     };
   }
-
 
   /**
   |--------------------------------------------------
@@ -35,6 +38,7 @@ export class BillingInfo extends Component {
   |--------------------------------------------------
   */
   inputCheck = () => {
+    console.log("Business number", this.props.navigation.state.params.businessContact)
     this.props.navigation.navigate("ConfirmApp", {
       paymentMethod: this.state.paymentMethod,
       bank: this.state.bank,
@@ -51,7 +55,8 @@ export class BillingInfo extends Component {
       busniessCategory: this.props.navigation.state.params.busniessCategory,
       businessEmail: this.props.navigation.state.params.businessEmail,
       businessContact: this.props.navigation.state.params.businessContact,
-      busniessRegisterNum: this.props.navigation.state.params.busniessRegisterNum,
+      busniessRegisterNum: this.props.navigation.state.params
+        .busniessRegisterNum,
       tax: this.props.navigation.state.params.tax,
       businessWebsite: this.props.navigation.state.params.businessWebsite,
       legalName: this.props.navigation.state.params.legalName,
@@ -64,7 +69,25 @@ export class BillingInfo extends Component {
     });
   };
 
+  createData() {
+    return this.state.currencyList.map(el => ({ value: el }));
+  }
+
+  createData2() {
+    return this.state.bankList.map(el => ({ value: el }));
+  }
+
+  createData3() {
+    return this.state.paymentList.map(el => ({ value: el }));
+  }
+
+  
   render() {
+    const currencyList = this.createData();
+    const bankList = this.createData2();
+    const paymentList = this.createData3();
+
+
     return (
       <View styles={styles.container}>
         <ScrollView>
@@ -89,54 +112,57 @@ export class BillingInfo extends Component {
                 Tell us your preferred billing info for future billing
               </Text>
             </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "flex-start",
-                paddingTop: 30
+          </View>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "flex-start",
+              paddingTop: 30
+            }}
+          >
+            <Text>Payment Method</Text>
+            <Dropdown
+              data={paymentList}
+              label="Select"
+              containerStyle={{
+                // height: 170,
+                width: width / 1.5
               }}
-            >
-              <Text>Payment Method</Text>
-              <Picker
-                selectedValue={this.state.paymentMethod}
-                style={{
-                  height: 170,
-                  width: width / 1.5,
-                  backgroundColor: "grey"
-                }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({ paymentMethod: itemValue })
-                }
-              >
-                <Picker.Item label="AUTOPLAY" value="autopay" />
-                <Picker.Item label="PayPal" value="paypal" />
-                <Picker.Item label="Visa" value="visa" />
-              </Picker>
-            </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "flex-start",
-                paddingTop: 30
+              dropdownMargins={{ min: 8, max: 16 }}
+              onChangeText={value => {
+                this.setState({ paymentMethod: value });
               }}
-            >
-              <Text>Bank</Text>
-              <Picker
-                selectedValue={this.state.bank}
-                style={{
-                  height: 170,
-                  width: width / 1.5,
-                  backgroundColor: "grey"
-                }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({ bank: itemValue })
-                }
-              >
-                <Picker.Item label="CIMB" value="cimb" />
-                <Picker.Item label="Maybank" value="may" />
-                <Picker.Item label="RHB" value="rhb" />
-              </Picker>
-            </View>
+            />
+          </View>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "flex-start",
+              paddingTop: 30
+            }}
+          >
+            <Text>Bank</Text>
+            <Dropdown
+              data={bankList}
+              label="Select"
+              containerStyle={{
+                // height: 170,
+                width: width / 1.5
+              }}
+              dropdownMargins={{ min: 8, max: 16 }}
+              onChangeText={value => {
+                this.setState({ bank: value });
+              }}
+            />
+          </View>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              paddingLeft: 15,
+              paddingRight: 20
+            }}
+          >
             <View
               style={{
                 justifyContent: "center",
@@ -187,30 +213,36 @@ export class BillingInfo extends Component {
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "flex-start",
-                paddingTop: 30
+          </View>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "flex-start",
+              paddingTop: 30
+            }}
+          >
+            <Text>Currency</Text>
+            <Dropdown
+              data={currencyList}
+              label="Select"
+              containerStyle={{
+                // height: 170,
+                width: width / 1.5
               }}
-            >
-              <Text>Currency</Text>
-              <Picker
-                selectedValue={this.state.currency}
-                style={{
-                  height: 170,
-                  width: width / 1.5,
-                  backgroundColor: "grey"
-                }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({ currency: itemValue })
-                }
-              >
-                <Picker.Item label="MYR" value="rm" />
-                <Picker.Item label="$" value="dollor" />
-                <Picker.Item label="Baht" value="baht" />
-              </Picker>
-            </View>
+              dropdownMargins={{ min: 8, max: 16 }}
+              onChangeText={value => {
+                this.setState({ currency: value });
+              }}
+            />
+          </View>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              paddingLeft: 15,
+              paddingRight: 20
+            }}
+          >
             <View
               style={{
                 justifyContent: "center",
@@ -319,7 +351,8 @@ export class BillingInfo extends Component {
               style={{
                 justifyContent: "center",
                 alignItems: "flex-start",
-                paddingTop: 30
+                paddingTop: 30,
+                marginBottom: 40
               }}
               onPress={() => this.inputCheck()}
             >

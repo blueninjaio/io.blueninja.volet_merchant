@@ -28,6 +28,7 @@ export class ValidateApplication extends Component {
             </Text>
           </View>
           <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("Business")}
             style={{ justifyContent: "center", alignItems: "center" }}
           >
             <Text>Done</Text>

@@ -8,7 +8,10 @@ import {
   ScrollView,
   StatusBar,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableHighlight,
+  AsyncStorage,
+  Alert
 } from "react-native";
 import {
   Header,
@@ -18,17 +21,65 @@ import {
   Card,
   CardItem,
   Thumbnail,
+  Title,
+  Icon
 } from "native-base";
 import { LinearGradient } from "expo";
+import NotificationList from "../../../component/NotificationList";
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      user: "Fa Mulan"
+      username: "",
+      isVisible: false,
+      notificationList: [
+        {
+          title: "Received by RM 50 from Someone"
+        },
+        {
+          title: "Sent RM 50 to Someone"
+        }
+      ]
     };
   }
+
+  /**
+|--------------------------------------------------
+| Get Volet balance
+|--------------------------------------------------
+*/
+  componentDidMount = () => {
+    this.getUserID();
+  };
+
+  getUserID = async () => {
+    try {
+      let id = await AsyncStorage.getItem("ID");
+      let username = await AsyncStorage.getItem("firstname");
+      if (id !== null) {
+        this.setState({ id });
+        this.setState({ username });
+      }
+    } catch (error) {
+      Alert.alert(
+        "Error connecting to server storage",
+        `${error}`,
+        [{ text: "OK", onPress: () => null }],
+        { cancelable: false }
+      );
+    }
+  };
+
+  /**
+  |--------------------------------------------------
+  | Implementation of side bar
+  |--------------------------------------------------
+  */
+  showSidebar = () => {
+    this.setState({ isVisible: !this.state.isVisible });
+  };
 
   render() {
     return (
@@ -46,11 +97,13 @@ export default class App extends React.Component {
                 />
               </Body>
               <Right style={styles.headerOneRight}>
-                <Image
-                  source={require("../../../assets/bell.png")}
-                  resizeMode="contain"
-                  style={{ width: 22, height: 22 }}
-                />
+                <TouchableOpacity onPress={() => this.showSidebar()}>
+                  <Image
+                    source={require("../../../assets/bell.png")}
+                    resizeMode="contain"
+                    style={{ width: 22, height: 22 }}
+                  />
+                </TouchableOpacity>
               </Right>
             </Header>
             <View style={styles.welcomeUser}>
@@ -72,7 +125,7 @@ export default class App extends React.Component {
                   color: "white"
                 }}
               >
-                {this.state.user}
+                {this.state.username}
               </Text>
             </View>
           </LinearGradient>
@@ -139,6 +192,53 @@ export default class App extends React.Component {
             </CardItem>
           </Card>
         </TouchableOpacity>
+        {this.state.isVisible === true ? (
+          <View
+            style={{
+              position: "absolute",
+              width: width / 1.1,
+              height: "100%",
+              right: 0,
+              top: 0,
+              zIndex: 999999,
+              backgroundColor: "white"
+            }}
+          >
+            <Header style={{ backgroundColor: "white" }}>
+              <Left />
+              <Body>
+                <Title>Notification</Title>
+              </Body>
+              <Right>
+                <TouchableHighlight
+                  transparent
+                  onPress={() => this.setState({ isVisible: false })}
+                >
+                  <Icon name="close" />
+                </TouchableHighlight>
+              </Right>
+            </Header>
+            <ScrollView>
+              <View style={{ flex: 1 }}>
+                {this.state.notificationList.map((x, i) => (
+                  <View key={i}>
+                    <NotificationList
+                      icon={require("../../../assets/qrcode.png")}
+                      title={x.title}
+                    />
+                  </View>
+                ))}
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <TouchableOpacity>
+                    <Text>Clear All</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+        ) : null}
       </View>
     );
   }
