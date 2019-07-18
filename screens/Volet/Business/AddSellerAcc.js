@@ -6,7 +6,8 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from "react-native";
 import { Icon, Header, Left, Body, Title, Right } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
@@ -45,16 +46,19 @@ export class AddSellerAcc extends Component {
       postalCode: "",
       states: "",
       country: "",
-      bankList: ["Maybank", "CIMB", "RHB"],
-      currencyList: ["MYR"],
-      paymentList: ["Autopay", "PayPal", "Credit"],
+      bankList: [],
+      currencyList: [],
+      paymentList: [],
       businessList: [],
       ischangeScreen: "AddSellerAcc"
     };
   }
 
   componentDidMount = () => {
-    this.getBusiness();
+    this.getBusinessInformation();
+    // this.getCurrency();
+    // this.getBank();
+    // this.getPayment();
     this.getPermissionAsync();
     this.getUserInfo();
   };
@@ -152,12 +156,16 @@ export class AddSellerAcc extends Component {
 
   /**
   |--------------------------------------------------
-  | Implementation of get Business Categories
+  | Implementation of get Business Informations
   |--------------------------------------------------
   */
-  getBusiness = () => {
+  getBusinessInformation = () => {
     let cateArray = [];
-    fetch(`${url}/api/category/`, {
+    let bankArray = [];
+    let paymentArray = [];
+    let currencyArray = [];
+    let busTypeArray =[]
+    fetch(`${url}/api/business/registrationInformation`, {
       method: "GET",
       mode: "cors",
       headers: {
@@ -166,11 +174,31 @@ export class AddSellerAcc extends Component {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.categories.length >= 1) {
-          data.categories.map(x => cateArray.push(x.title));
-          this.setState({ businessList: cateArray });
-          // console.log("catearray", cateArray);
+        console.log("Business informations", data)
+        if (data.success === true){
+          if (data.info[3].category.length >= 1) {
+            data.info[3].category.map(x => cateArray.push(x.title));
+            this.setState({ businessList: cateArray });
+            console.log("Category List", cateArray);
+          }
+          if (data.info[0].currency.length >= 1) {
+            data.info[0].currency.map(x => currencyArray.push(x.name));
+            this.setState({ currencyList: currencyArray });
+            console.log("Currency list", currencyArray);
+          }
+          if (data.info[2].bank.length >= 1) {
+            data.info[2].bank.map(x => bankArray.push(x.name));
+            this.setState({ bankList: bankArray });
+            console.log("bank list", bankArray);
+          }
+          if (data.info[1].payment_method.length >= 1) {
+            data.info[1].payment_method.map(x => paymentArray.push(x.name));
+            this.setState({ paymentList: paymentArray });
+            console.log("bank list", paymentArray);
+          }
+          
         }
+
       })
       .catch(error => {
         Alert.alert(
@@ -254,9 +282,7 @@ export class AddSellerAcc extends Component {
 |--------------------------------------------------
 */
   createData() {
-    return this.state.businessList.map(el => ({
-      value: el
-    }));
+    return this.state.businessList.map(el => ({ value: el }));
   }
   createData1() {
     return this.state.currencyList.map(el => ({ value: el }));
@@ -271,19 +297,6 @@ export class AddSellerAcc extends Component {
   }
 
   onClickChangeScreen = screenName => {
-    // if (screenName === "BusinessInfo") {
-    //   if (this.state.id === "") {
-    //     alert("Invalid Passport number");
-    //   } else if (this.state.icImage === "") {
-    //     alert("Invalid Passport image");
-    //   } else {
-    //     this.setState({ ischangeScreen: screenName });
-    //   }
-    // } else if (screenName === "BillingInfo") {
-    //   this.setState({ ischangeScreen: screenName });
-    // } else if (screenName === "ConfirmApplication") {
-    //   this.setState({ ischangeScreen: screenName });
-    // }
     this.setState({ ischangeScreen: screenName });
   };
 

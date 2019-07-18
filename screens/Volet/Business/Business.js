@@ -6,7 +6,8 @@ import {
   Dimensions,
   TouchableOpacity,
   FlatList,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from "react-native";
 import { Icon, Thumbnail } from "native-base";
 export const { width, height } = Dimensions.get("window");
@@ -58,7 +59,7 @@ export class Business extends Component {
 
   addBusiness = () => {
     let cateArray = [];
-    fetch(`${url}/api/category/`, {
+    fetch(`${url}/api/business_category`, {
       method: "GET",
       mode: "cors",
       headers: {
