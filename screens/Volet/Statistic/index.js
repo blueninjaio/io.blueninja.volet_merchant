@@ -1,33 +1,25 @@
-import React from 'react';
-import { createStackNavigator } from 'react-navigation';
+import React from "react";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
-
-import Statistic from './Statistic'
-
+import Statistic from "./Statistic";
 
 const MyStatisticScreen = ({ navigation }) => (
   <Statistic navigation={navigation} />
 );
 MyStatisticScreen.navigationOptions = {
-    mode: 'card',
-    title: 'Statistic',
-    headerStyle: {
-        backgroundColor: "white",
-    },
+  mode: "card",
+  header: null
 };
 
 const ModalStack = createStackNavigator(
   {
     Statistic: {
-        screen: MyStatisticScreen,
-    },
+      screen: MyStatisticScreen
+    }
   },
   {
-    defaultNavigationOptions: {
-      header: null,
-      //headerLeft: null,
-    }
+    defaultNavigationOptions: {}
   }
 );
 
-export default ModalStack;
+export default createAppContainer(ModalStack);

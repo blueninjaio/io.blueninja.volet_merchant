@@ -5,14 +5,7 @@ import {
   createStackNavigator,
   createAppContainer
 } from "react-navigation";
-import {
-  View,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  Text,
-  StyleSheet
-} from "react-native";
+import { View, Image, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -113,8 +106,6 @@ const UserTabNavigator = createBottomTabNavigator(
       indicatorStyle: { backgroundColor: "transparent" },
       style: {
         backgroundColor: "white",
-        // borderTopColor: 'red',
-        // borderTopWidth: ,
         shadowOffset: { width: 5, height: 3 },
         shadowColor: "black",
         shadowOpacity: 0.5,

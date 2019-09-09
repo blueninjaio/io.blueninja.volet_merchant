@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text } from "react-native";
-import { createStackNavigator } from "react-navigation";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
 import Business from "./Business";
 import SellerAcc from "./AddSellerAcc";
@@ -139,4 +139,4 @@ const ModalStack = createStackNavigator(
   }
 );
 
-export default ModalStack;
+export default createAppContainer(ModalStack);

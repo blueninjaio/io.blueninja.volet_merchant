@@ -1,5 +1,5 @@
 import React from "react";
-import { createStackNavigator } from "react-navigation";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
 import Home from "./Home";
 
@@ -23,4 +23,4 @@ const ModalStack = createStackNavigator(
   }
 );
 
-export default ModalStack;
+export default createAppContainer(ModalStack);
