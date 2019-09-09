@@ -155,16 +155,40 @@ export class Statistic extends Component {
               alignItems: "flex-start",
               width: width / 1.1,
               padding: 10,
-              backgroundColor: "pink",
-              marginTop: 20
+              backgroundColor: "white",
+              marginTop: 20,
+              borderRadius: 10,
+              borderColor: "#ddd",
+              shadowColor: "#000",
+              shadowOffset: { width: 3, height: 5 },
+              shadowOpacity: 0.3,
+              shadowRadius: 4,
+              elevation: 1
             }}
           >
             <View style={{ justifyContent: "flex-start", width: width / 3 }}>
               <Text>Average Daily Earnings</Text>
             </View>
             <View style={{ justifyContent: "center", alignItems: "flex-end" }}>
-              <Text>MYR</Text>
-              <Text>10,524</Text>
+              <Text
+                style={{
+                  paddingBottom: 15,
+                  fontWeight: "bold",
+                  color: "#5B86E5",
+                  fontSize: 15
+                }}
+              >
+                MYR
+              </Text>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "#5B86E5",
+                  fontSize: 15
+                }}
+              >
+                12,321
+              </Text>
             </View>
           </View>
           <View
@@ -174,16 +198,32 @@ export class Statistic extends Component {
               alignItems: "flex-start",
               width: width / 1.1,
               padding: 10,
-              backgroundColor: "pink",
               marginTop: 20,
-              marginBottom: 20
+              marginBottom: 20,
+              backgroundColor: "white",
+              borderRadius: 10,
+              borderColor: "#ddd",
+              shadowColor: "#000",
+              shadowOffset: { width: 3, height: 5 },
+              shadowOpacity: 0.3,
+              shadowRadius: 4,
+              elevation: 1
             }}
           >
             <View style={{ justifyContent: "flex-start", width: width / 3 }}>
               <Text>Average Daily Customers</Text>
             </View>
             <View style={{ justifyContent: "center", alignItems: "flex-end" }}>
-              <Text>2123</Text>
+              <Text
+                style={{
+                  paddingBottom: 15,
+                  fontWeight: "bold",
+                  color: "#5B86E5",
+                  fontSize: 15
+                }}
+              >
+                12,321
+              </Text>
             </View>
           </View>
           <View
@@ -200,24 +240,37 @@ export class Statistic extends Component {
                 justifyContent: "space-between",
                 padding: 10,
                 alignItems: "flex-start",
-                backgroundColor: "brown",
-                width: width / 2.5
+                width: width / 2.5,
+                backgroundColor: "white",
+                borderRadius: 10,
+                borderColor: "#ddd",
+                shadowColor: "#000",
+                shadowOffset: { width: 3, height: 5 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+                elevation: 1
               }}
             >
               <View
                 style={{
                   paddingBottom: 30,
-                  backgroundColor: "pink",
                   alignItems: "flex-start",
                   width: width / 3
                 }}
               >
                 <Text>Todays Earnings</Text>
               </View>
-              <TouchableOpacity
-                style={{ backgroundColor: "yellow", alignItems: "flex-start" }}
-              >
-                <Text>View</Text>
+              <TouchableOpacity style={{ alignItems: "flex-start" }}>
+                <Text
+                  style={{
+                    paddingBottom: 15,
+                    fontWeight: "bold",
+                    color: "#5B86E5",
+                    fontSize: 15
+                  }}
+                >
+                  View
+                </Text>
               </TouchableOpacity>
             </View>
             <View
@@ -226,24 +279,38 @@ export class Statistic extends Component {
                 justifyContent: "space-between",
                 padding: 10,
                 alignItems: "flex-start",
-                backgroundColor: "brown",
-                width: width / 2.5
+                width: width / 2.5,
+                backgroundColor: "white",
+                borderRadius: 10,
+                borderColor: "#ddd",
+                shadowColor: "#000",
+                shadowOffset: { width: 3, height: 5 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+                elevation: 1
               }}
             >
               <View
                 style={{
                   paddingBottom: 30,
-                  backgroundColor: "pink",
+
                   alignItems: "flex-start",
                   width: width / 3
                 }}
               >
                 <Text>This Weeks Customer</Text>
               </View>
-              <TouchableOpacity
-                style={{ backgroundColor: "yellow", alignItems: "flex-start" }}
-              >
-                <Text>View</Text>
+              <TouchableOpacity style={{ alignItems: "flex-start" }}>
+                <Text
+                  style={{
+                    paddingBottom: 15,
+                    fontWeight: "bold",
+                    color: "#5B86E5",
+                    fontSize: 15
+                  }}
+                >
+                  View
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
