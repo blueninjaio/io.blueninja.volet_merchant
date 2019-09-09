@@ -53,26 +53,26 @@ export default createBottomTabNavigator(
           )
       }
     },
-    Business: {
-      screen: Business,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) =>
-          tintColor === "black" ? (
-            <Image
-              source={require("../assets/business.png")}
-              resizeMode="contain"
-              style={{ width: 60, height: 70 }}
+    // Business: {
+    //   screen: Business,
+    //   navigationOptions: {
+    //     tabBarIcon: ({ tintColor }) =>
+    //       tintColor === "black" ? (
+    //         <Image
+    //           source={require("../assets/business.png")}
+    //           resizeMode="contain"
+    //           style={{ width: 60, height: 70 }}
 
-            />
-          ) : (
-            <Image
-              source={require("../assets/businessActive.png")}
-              resizeMode="contain"
-              style={{ width: 60, height: 70 }}
-            />
-          )
-      }
-    },
+    //         />
+    //       ) : (
+    //         <Image
+    //           source={require("../assets/businessActive.png")}
+    //           resizeMode="contain"
+    //           style={{ width: 60, height: 70 }}
+    //         />
+    //       )
+    //   }
+    // },
     Profile: {
       screen: Profile,
       navigationOptions: {

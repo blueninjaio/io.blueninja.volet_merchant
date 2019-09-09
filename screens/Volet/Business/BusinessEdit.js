@@ -142,10 +142,10 @@ export class BusinessEdit extends Component {
   |--------------------------------------------------
   */
   componentDidMount = () => {
-    this.getBusinessItem();
-    this.getPermissionAsync();
-    this.getBusiness();
-    console.log("Business id", this.props.navigation.state.params.businessID);
+    // this.getBusinessItem();
+    // this.getPermissionAsync();
+    // this.getBusiness();
+    // console.log("Business id", this.props.navigation.state.params.businessID);
   };
 
   getBusinessItem = () => {
@@ -179,7 +179,7 @@ export class BusinessEdit extends Component {
   };
 
   addBusinessInfo = () => {
-    console.log("time", this.state.sunStartTime)
+    console.log("time", this.state.sunStartTime);
     fetch(`${url}/api/business/info`, {
       method: "POST",
       mode: "cors",
@@ -194,8 +194,14 @@ export class BusinessEdit extends Component {
         sunday: { start: this.state.sunStartTime, end: this.state.sunEndTime },
         monday: { start: this.state.monStartTime, end: this.state.monEndTime },
         tuesday: { start: this.state.tueStartTime, end: this.state.tueEndTime },
-        wednesday: { start: this.state.wedStartTime, end: this.state.wedEndTime },
-        thursday: { start: this.state.thurStartTime, end: this.state.thurEndTime },
+        wednesday: {
+          start: this.state.wedStartTime,
+          end: this.state.wedEndTime
+        },
+        thursday: {
+          start: this.state.thurStartTime,
+          end: this.state.thurEndTime
+        },
         friday: { start: this.state.friStartTime, end: this.state.friEndTime },
         saturday: { start: this.state.satStartTime, end: this.state.satEndTime }
       })

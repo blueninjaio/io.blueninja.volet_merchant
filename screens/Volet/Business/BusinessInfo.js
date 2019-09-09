@@ -58,14 +58,13 @@ export class BusinessInfo extends Component {
     });
   };
 
-
   /**
   |--------------------------------------------------
   | Implementation of get Business Categories
   |--------------------------------------------------
   */
   componentDidMount = () => {
-    this.addBusiness();
+    // this.addBusiness();
   };
 
   addBusiness = () => {
@@ -108,7 +107,7 @@ export class BusinessInfo extends Component {
 
   render() {
     const dropDownValue = this.createData();
-    
+
     return (
       <View styles={styles.container}>
         <ScrollView>

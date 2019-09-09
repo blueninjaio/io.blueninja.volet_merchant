@@ -55,12 +55,12 @@ export class AddSellerAcc extends Component {
   }
 
   componentDidMount = () => {
-    this.getBusinessInformation();
-    // this.getCurrency();
-    // this.getBank();
-    // this.getPayment();
-    this.getPermissionAsync();
-    this.getUserInfo();
+    // this.getBusinessInformation();
+    // // this.getCurrency();
+    // // this.getBank();
+    // // this.getPayment();
+    // this.getPermissionAsync();
+    // this.getUserInfo();
   };
 
   /**
@@ -164,7 +164,7 @@ export class AddSellerAcc extends Component {
     let bankArray = [];
     let paymentArray = [];
     let currencyArray = [];
-    let busTypeArray =[]
+    let busTypeArray = [];
     fetch(`${url}/api/business/registrationInformation`, {
       method: "GET",
       mode: "cors",
@@ -174,8 +174,8 @@ export class AddSellerAcc extends Component {
     })
       .then(res => res.json())
       .then(data => {
-        console.log("Business informations", data)
-        if (data.success === true){
+        console.log("Business informations", data);
+        if (data.success === true) {
           if (data.info[3].category.length >= 1) {
             data.info[3].category.map(x => cateArray.push(x.title));
             this.setState({ businessList: cateArray });
@@ -196,9 +196,7 @@ export class AddSellerAcc extends Component {
             this.setState({ paymentList: paymentArray });
             console.log("bank list", paymentArray);
           }
-          
         }
-
       })
       .catch(error => {
         Alert.alert(

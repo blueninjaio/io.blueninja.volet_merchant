@@ -35,10 +35,10 @@ export class Business extends Component {
   |--------------------------------------------------
   */
 
-  componentDidMount = () => {
-    this.addBusiness();
-    this.getUserInfo();
-  };
+  // componentDidMount = () => {
+  //   // this.addBusiness();
+  //   // this.getUserInfo();
+  // };
 
   getUserInfo = async () => {
     try {
@@ -127,7 +127,7 @@ export class Business extends Component {
           onPress={() => this.props.navigation.navigate("SellerAcc")}
         >
           <Icon name="ios-add-circle-outline" type="Ionicons" />
-          <Text>Add Business</Text>
+          <Text>Coming Soon</Text>
         </TouchableOpacity>
         <View>
           <FlatList

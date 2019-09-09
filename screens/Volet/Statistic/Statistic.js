@@ -55,53 +55,99 @@ export class Statistic extends Component {
                 justifyContent: "space-between",
                 padding: 10,
                 alignItems: "flex-start",
-                backgroundColor: "brown",
-                width: width / 2.5
+                backgroundColor: "white",
+                width: width / 2.5,
+                borderRadius: 10,
+                borderColor: "#ddd",
+                shadowColor: "#000",
+                shadowOffset: { width: 3, height: 5 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+                elevation: 1
               }}
             >
               <View
                 style={{
-                  paddingBottom: 30,
-                  backgroundColor: "pink",
-                  alignItems: "flex-start"
+                  paddingBottom: 20
                 }}
               >
                 <Text>Todays Earnings</Text>
               </View>
-              <View
-                style={{ backgroundColor: "yellow", alignItems: "flex-start" }}
-              >
-                <Text>MYR</Text>
-                <Text>12,321</Text>
+              <View>
+                <Text
+                  style={{
+                    paddingBottom: 15,
+                    fontWeight: "bold",
+                    color: "#5B86E5",
+                    fontSize: 15
+                  }}
+                >
+                  MYR
+                </Text>
+                <Text
+                  style={{
+                    paddingBottom: 15,
+                    fontWeight: "bold",
+                    color: "#5B86E5",
+                    fontSize: 15
+                  }}
+                >
+                  12,321
+                </Text>
               </View>
             </View>
+
             <View
               style={{
                 height: height / 5,
                 justifyContent: "space-between",
                 padding: 10,
                 alignItems: "flex-start",
-                backgroundColor: "brown",
-                width: width / 2.5
+                backgroundColor: "white",
+                width: width / 2.5,
+                borderRadius: 10,
+                borderColor: "#ddd",
+                shadowColor: "#000",
+                shadowOffset: { width: 3, height: 5 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+                elevation: 1
               }}
             >
               <View
                 style={{
                   paddingBottom: 30,
-                  backgroundColor: "pink",
+
                   alignItems: "flex-start"
                 }}
               >
                 <Text>This Weeks Earnings</Text>
               </View>
-              <View
-                style={{ backgroundColor: "yellow", alignItems: "flex-start" }}
-              >
-                <Text>MYR</Text>
-                <Text>12,321</Text>
+              <View>
+                <Text
+                  style={{
+                    paddingBottom: 15,
+                    fontWeight: "bold",
+                    color: "#5B86E5",
+                    fontSize: 15
+                  }}
+                >
+                  MYR
+                </Text>
+                <Text
+                  style={{
+                    paddingBottom: 15,
+                    fontWeight: "bold",
+                    color: "#5B86E5",
+                    fontSize: 15
+                  }}
+                >
+                  12,321
+                </Text>
               </View>
             </View>
           </View>
+
           <View
             style={{
               flexDirection: "row",
