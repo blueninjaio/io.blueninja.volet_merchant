@@ -1,10 +1,20 @@
 import React from "react";
 
-import { createBottomTabNavigator } from "react-navigation";
-import { View, Image, Dimensions } from "react-native";
+import {
+  createBottomTabNavigator,
+  createStackNavigator,
+  createAppContainer
+} from "react-navigation";
+import {
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  Text,
+  StyleSheet
+} from "react-native";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+const { width, height } = Dimensions.get("window");
 
 import Icon from "react-native-vector-icons/Ionicons";
 
@@ -13,7 +23,7 @@ import Statistic from "../screens/Volet/Statistic";
 import Business from "../screens/Volet/Business";
 import Profile from "../screens/Volet/Profile";
 
-export default createBottomTabNavigator(
+const UserTabNavigator = createBottomTabNavigator(
   {
     Home: {
       screen: Home,
@@ -114,3 +124,14 @@ export default createBottomTabNavigator(
     }
   }
 );
+
+const StackNavigator = createStackNavigator({
+  Home: {
+    screen: UserTabNavigator,
+    navigationOptions: ({ navigation }) => ({
+      header: null
+    })
+  }
+});
+
+export default createAppContainer(StackNavigator);

@@ -260,7 +260,10 @@ export class Statistic extends Component {
               >
                 <Text>Todays Earnings</Text>
               </View>
-              <TouchableOpacity style={{ alignItems: "flex-start" }}>
+              <TouchableOpacity
+                style={{ alignItems: "flex-start" }}
+                onPress={() => this.props.navigation.navigate("ViewStatistic")}
+              >
                 <Text
                   style={{
                     paddingBottom: 15,
