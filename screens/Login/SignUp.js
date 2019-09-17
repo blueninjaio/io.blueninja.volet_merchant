@@ -6,11 +6,9 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-  Image,
-  Alert
+  Image
 } from "react-native";
 import { LinearGradient } from "expo";
-import { Thumbnail } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
 import api from "../../api/index";
 
@@ -36,6 +34,7 @@ export class SignUp extends Component {
           });
         }
         alert(data.message);
+        console.log(data.message);
       })
       .catch(err => console.log(err));
   };
@@ -125,7 +124,7 @@ export class SignUp extends Component {
             >
               <TouchableOpacity
                 style={styles.buttonStyle}
-                onPress={this.onActionSendTAC()}
+                onPress={this.onActionSendTAC}
               >
                 <Text style={styles.loginText}>Send Code</Text>
               </TouchableOpacity>

@@ -54,5 +54,9 @@ export default {
   },
   sendTAC: async contact => {
     return post("/tac/new", { contact });
+  },
+  checkTAC: async (contact, tac_code) => {
+    console.log(contact, tac_code);
+    return post("/tac/check", { contact, tac_code });
   }
 };
