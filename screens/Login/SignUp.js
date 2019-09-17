@@ -12,7 +12,9 @@ import {
 import { LinearGradient } from "expo";
 import { Thumbnail } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
-export const { width, height } = Dimensions.get("window");
+import api from "../../api/index";
+
+const { width, height } = Dimensions.get("window");
 
 export class SignUp extends Component {
   constructor(props) {
@@ -22,6 +24,21 @@ export class SignUp extends Component {
       number: ""
     };
   }
+
+  onActionSendTAC = () => {
+    api
+      .sendTAC(this.state.number)
+      .then(data => {
+        if (data.success) {
+          this.props.navigation.navigate("TAC", {
+            contact: "+60" + this.state.number,
+            requestMethod: "SignUp"
+          });
+        }
+        alert(data.message);
+      })
+      .catch(err => console.log(err));
+  };
 
   render() {
     return (
@@ -108,7 +125,7 @@ export class SignUp extends Component {
             >
               <TouchableOpacity
                 style={styles.buttonStyle}
-                onPress={() => this.sendTacCode()}
+                onPress={this.onActionSendTAC()}
               >
                 <Text style={styles.loginText}>Send Code</Text>
               </TouchableOpacity>

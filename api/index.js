@@ -19,22 +19,40 @@ const get = async route => {
 const post = async (route, body) => {
   let token = AsyncStorage.getItem("token");
 
-  let response = await fetch(`${url}${route}`, {
-    method: "POST",
-    mode: "cors",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json; charset=utf-8",
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(body)
-  });
-  return await response.json();
+  if (route !== "/merchants/register") {
+    let response = await fetch(`${url}${route}`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
+    });
+    return await response.json();
+  } else if (route !== "/merchants/register") {
+    let response = await fetch(`${url}${route}`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
+    });
+    return await response.json();
+  }
 };
 
 export default {
   login: async (login_input, password) => {
     return post("/merchants/login", { login_input, password });
+  },
+  sendTAC: async contact => {
+    return post("/tac/new", { contact });
   }
 };
