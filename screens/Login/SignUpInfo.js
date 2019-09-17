@@ -53,6 +53,7 @@ import {
   Constants
 } from "expo";
 import { connect } from "react-redux";
+import api from "../../api/index";
 
 export class SignUpInfo extends Component {
   constructor(props) {
@@ -79,27 +80,30 @@ export class SignUpInfo extends Component {
   }
 
   userSignUp = () => {
-    fetch(`${url}/api/merchants/`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8"
-      },
-      body: JSON.stringify({
-        facebook_id: this.state.facebook_id,
-        google_id: this.state.google_id,
-        contact: this.props.navigation.state.params.contact,
-        f_name: this.state.firstName,
-        l_name: this.state.lastName,
-        email: this.state.email,
-        password: this.state.password
-      })
-    })
-      .then(res => res.json())
+    let facebook_id = this.state.facebook_id;
+    let google_id = this.state.google_id;
+    let contact = this.props.navigation.state.params.contact;
+    let f_name = this.state.firstName;
+    let l_name = this.state.lastName;
+    let email = this.state.email;
+    let password = this.state.password;
+    console.log("Sign up tac token:", this.props.navigation.state.params.token);
+
+    AsyncStorage.setItem("tac_token", this.props.navigation.state.params.token);
+
+    api
+      .register(
+        facebook_id,
+        google_id,
+        contact,
+        f_name,
+        l_name,
+        email,
+        password
+      )
       .then(data => {
         console.log("Sign Up :", data);
         if (data.success === true) {
-          // this.props.navigation.navigate("Login");
           Alert.alert(
             "Success",
             `${data.message}`,
@@ -135,18 +139,8 @@ export class SignUpInfo extends Component {
       alert(`Please enter a valid email address.`);
     else if (this.state.password.length < 6) alert(`Please enter a password.`);
     else {
-      fetch(`${dev}/api/merchants/login`, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8"
-        },
-        body: JSON.stringify({
-          email: this.state.email,
-          password: this.state.password
-        })
-      })
-        .then(response => response.json())
+      api
+        .login(this.state.email, this.state.password)
         .then(data => {
           console.log("Fetch Data: ", data);
           if (data.success) {

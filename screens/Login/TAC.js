@@ -42,27 +42,23 @@ export class TAC extends Component {
 
   onActionTacCode = tacCode => {
     let contact = this.props.navigation.state.params.contact;
-
     this.setState({ tacCode });
 
     if (tacCode.length === 6) {
-      console.log(contact, tacCode);
       api
-        .checkTAC(this.props.navigation.state.params.contact, tacCode)
+        .checkTAC(contact, tacCode)
         .then(data => {
           console.log("Valid Tac", data);
           if (data.success === true) {
-            alert("TAC route working");
             if (this.props.navigation.state.params.requestMethod === "SignUp")
               this.props.navigation.navigate("SignUpInfo", {
-                contact: this.props.navigation.state.params.contact,
+                contact: contact,
                 token: data.token
               });
             else {
               this.props.navigation.navigate("ForgetPassword", {
                 contact: this.props.navigation.state.params.contact,
-                token: data.token,
-                email: data.email
+                token: data.token
               });
             }
           } else {

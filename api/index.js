@@ -18,8 +18,10 @@ const get = async route => {
 
 const post = async (route, body) => {
   let token = AsyncStorage.getItem("token");
+  let tac_token = await AsyncStorage.getItem("tac_token");
+  console.log("Tac token", tac_token);
 
-  if (route !== "/merchants/register") {
+  if (route !== "/merchants") {
     let response = await fetch(`${url}${route}`, {
       method: "POST",
       mode: "cors",
@@ -32,15 +34,15 @@ const post = async (route, body) => {
       body: JSON.stringify(body)
     });
     return await response.json();
-  } else if (route !== "/merchants/register") {
+  } else if (route === "/merchants") {
     let response = await fetch(`${url}${route}`, {
       method: "POST",
       mode: "cors",
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json; charset=utf-8",
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`
+        Accept: "application/json1",
+        "x-tac-token": `${tac_token}`
       },
       body: JSON.stringify(body)
     });
@@ -56,7 +58,25 @@ export default {
     return post("/tac/new", { contact });
   },
   checkTAC: async (contact, tac_code) => {
-    console.log(contact, tac_code);
     return post("/tac/check", { contact, tac_code });
+  },
+  register: async (
+    facebook_id,
+    google_id,
+    contact,
+    f_name,
+    l_name,
+    email,
+    password
+  ) => {
+    return post("/merchants", {
+      facebook_id,
+      google_id,
+      contact,
+      f_name,
+      l_name,
+      email,
+      password
+    });
   }
 };
