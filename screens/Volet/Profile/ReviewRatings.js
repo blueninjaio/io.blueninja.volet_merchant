@@ -5,8 +5,11 @@ export default class ReviewRatings extends Component {
   render() {
     return (
       <SafeAreaView>
-        <View>
-          <Text> Add business to view reviews and ratings </Text>
+        <View style={{ justifyContent: "center" }}>
+          <Text style={{ alignSelf: "center", marginTop: 15 }}>
+            {" "}
+            Add business to view reviews and ratings{" "}
+          </Text>
         </View>
       </SafeAreaView>
     );

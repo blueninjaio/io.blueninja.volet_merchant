@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { View, Dimensions, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Dimensions,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView
+} from "react-native";
 import ListButton from "../../../component/ListButton";
 export const { width, height } = Dimensions.get("window");
 
@@ -55,7 +61,8 @@ export default AboutVolet;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+    paddingTop: 20
   },
   text: {
     color: "#979797",
