@@ -8,6 +8,7 @@ import PersonalDetails from "./PersonalDetails";
 import AboutVolet from "./AboutVolet";
 import FAQ from "./FAQ";
 import Policies from "./Policies";
+import ReviewRatings from "./ReviewRatings";
 
 const MyProfileScreen = ({ navigation }) => <Profile navigation={navigation} />;
 MyProfileScreen.navigationOptions = {
@@ -69,6 +70,18 @@ MyPoliciesScreen.navigationOptions = {
   }
 };
 
+const MyReviewRatingsScreen = ({ navigation }) => (
+  <ReviewRatings navigation={navigation} />
+);
+
+MyReviewRatingsScreen.navigationOptions = {
+  mode: "card",
+  title: "Reviews and Ratings",
+  headerStyle: {
+    backgroundColor: "white"
+  }
+};
+
 const ModalStack = createStackNavigator(
   {
     Profile: {
@@ -91,11 +104,14 @@ const ModalStack = createStackNavigator(
     },
     Policies: {
       screen: MyPoliciesScreen
+    },
+    ReviewRatings: {
+      screen: MyReviewRatingsScreen
     }
   },
   {
     defaultNavigationOptions: {
-      header: null
+      // header: null
     }
   }
 );
