@@ -91,96 +91,117 @@ export class Profile extends React.Component {
           </View>
           <View style={styles.voletContainer}>
             <LinearGradient
-              colors={["#36D1DC", "#5B86E5"]}
+              colors={["#5B86E5", "#36D1DC"]}
               style={styles.voletBalance}
             >
-              <Text style={{ color: "grey", opacity: 0.7 }}>
+              <Text style={{ color: "white", opacity: 0.7 }}>
                 Your Volet Balance
               </Text>
-              <Text style={{ color: "white", fontSize: 18 }}>RM 200.00</Text>
+              <Text
+                style={{ color: "white", fontSize: 18, fontWeight: "bold" }}
+              >
+                RM 200.00
+              </Text>
             </LinearGradient>
           </View>
           <View>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("PersonalDetails")}
-              style={styles.listItemButton}
-            >
-              <View style={styles.show}>
-                <Image
-                  source={require("../../../assets/profile.png")}
-                  resizeMode="contain"
-                  style={{ width: 40, height: 40 }}
-                />
-                <Text style={styles.listItemText}>Personal Details</Text>
-              </View>
-            </TouchableOpacity>
+            <View style={styles.shadowSet}>
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate("PersonalDetails")
+                }
+                style={styles.listItemButton}
+              >
+                <View style={styles.show}>
+                  <Image
+                    source={require("../../../assets/profile.png")}
+                    resizeMode="contain"
+                    style={{ width: 40, height: 40 }}
+                  />
+                  <Text style={styles.listItemText}>Personal Details</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("DeepWorks")}
-              style={styles.listItemButton}
-            >
-              <View style={styles.show}>
-                <Image
-                  source={require("../../../assets/piggy.png")}
-                  resizeMode="contain"
-                  style={{ width: 40, height: 40 }}
-                />
-                <Text style={styles.listItemText}>Withdraw Volet</Text>
-              </View>
-            </TouchableOpacity>
+            <View style={styles.shadowSet}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate("DeepWorks")}
+                style={styles.listItemButton}
+              >
+                <View style={styles.show}>
+                  <Image
+                    source={require("../../../assets/piggy.png")}
+                    resizeMode="contain"
+                    style={{ width: 40, height: 40 }}
+                  />
+                  <Text style={styles.listItemText}>Withdraw Volet</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("DeepWorks")}
-              style={styles.listItemButton}
-            >
-              <View style={styles.show}>
-                <Image
-                  source={require("../../../assets/transaction.png")}
-                  resizeMode="contain"
-                  style={{ width: 40, height: 40 }}
-                />
-                <Text style={styles.listItemText}>Transaction History</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("DeepWorks")}
-              style={styles.listItemButton}
-            >
-              <View style={styles.show}>
-                <Image
-                  source={require("../../../assets/directP.png")}
-                  resizeMode="contain"
-                  style={{ width: 40, height: 40 }}
-                />
-                <Text style={styles.listItemText}>Billing Method</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("")}
-              style={styles.listItemButton}
-            >
-              <View style={styles.show}>
-                <Image
-                  source={require("../../../assets/pen.png")}
-                  resizeMode="contain"
-                  style={{ width: 40, height: 40 }}
-                />
-                <Text style={styles.listItemText}>Reviews and Ratings</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Setting")}
-              style={styles.listItemButton}
-            >
-              <View style={styles.show}>
-                <Image
-                  source={require("../../../assets/config.png")}
-                  resizeMode="contain"
-                  style={{ width: 40, height: 40 }}
-                />
-                <Text style={styles.listItemText}>Settings</Text>
-              </View>
-            </TouchableOpacity>
+            <View style={styles.shadowSet}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate("DeepWorks")}
+                style={styles.listItemButton}
+              >
+                <View style={styles.show}>
+                  <Image
+                    source={require("../../../assets/transaction.png")}
+                    resizeMode="contain"
+                    style={{ width: 40, height: 40 }}
+                  />
+                  <Text style={styles.listItemText}>Transaction History</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.shadowSet}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate("DeepWorks")}
+                style={styles.listItemButton}
+              >
+                <View style={styles.show}>
+                  <Image
+                    source={require("../../../assets/directP.png")}
+                    resizeMode="contain"
+                    style={{ width: 40, height: 40 }}
+                  />
+                  <Text style={styles.listItemText}>Billing Method</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.shadowSet}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate("")}
+                style={styles.listItemButton}
+              >
+                <View style={styles.show}>
+                  <Image
+                    source={require("../../../assets/pen.png")}
+                    resizeMode="contain"
+                    style={{ width: 40, height: 40 }}
+                  />
+                  <Text style={styles.listItemText}>Reviews and Ratings</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.shadowSet}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate("Setting")}
+                style={styles.listItemButton}
+              >
+                <View style={styles.show}>
+                  <Image
+                    source={require("../../../assets/config.png")}
+                    resizeMode="contain"
+                    style={{ width: 40, height: 40 }}
+                  />
+                  <Text style={styles.listItemText}>Settings</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -238,44 +259,33 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15,
     marginLeft: 5,
-    marginRight: 5,
-    // borderWidth: 1,
-    // borderColor: "#979797",
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "#ddd",
-    // borderBottomWidth: 0,
-    shadowColor: "#000",
-    shadowOffset: { width: 3, height: 5 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 1
+    marginRight: 5
   },
   listItemButton: {
     padding: 10,
-    // borderRadius: 10,
     justifyContent: "flex-start",
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
     marginLeft: 5,
-    marginRight: 5,
-    // borderWidth: 1,
-    // borderColor: "#979797",
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "#ddd",
-    shadowColor: "#000",
-    shadowOffset: { width: 3, height: 5 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 1
+    marginRight: 5
   },
   listItemText: {
     fontSize: 15,
     color: "#979797",
     marginLeft: 20
+  },
+  shadowSet: {
+    marginLeft: 5,
+    marginRight: 5,
+    borderRadius: 10,
+    borderColor: "#dbdbdb",
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: { width: 3, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 1,
+    marginBottom: 15
   }
 });
