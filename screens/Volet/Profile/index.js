@@ -9,6 +9,7 @@ import AboutVolet from "./AboutVolet";
 import FAQ from "./FAQ";
 import Policies from "./Policies";
 import ReviewRatings from "./ReviewRatings";
+import ContactSupport from "./ContactSupport";
 
 const MyProfileScreen = ({ navigation }) => <Profile navigation={navigation} />;
 MyProfileScreen.navigationOptions = {
@@ -82,6 +83,17 @@ MyReviewRatingsScreen.navigationOptions = {
   }
 };
 
+const MyContactSupportScreen = ({ navigation }) => (
+  <ContactSupport navigation={navigation} />
+);
+MyContactSupportScreen.navigationOptions = {
+  mode: "card",
+  title: "Contact Support",
+  headerStyle: {
+    backgroundColor: "white"
+  }
+};
+
 const ModalStack = createStackNavigator(
   {
     Profile: {
@@ -107,6 +119,9 @@ const ModalStack = createStackNavigator(
     },
     ReviewRatings: {
       screen: MyReviewRatingsScreen
+    },
+    ContactSupport: {
+      screen: MyContactSupportScreen
     }
   },
   {
