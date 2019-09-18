@@ -173,7 +173,7 @@ export class Profile extends React.Component {
 
             <View style={styles.shadowSet}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("")}
+                onPress={() => this.props.navigation.navigate("ReviewRatings")}
                 style={styles.listItemButton}
               >
                 <View style={styles.show}>
