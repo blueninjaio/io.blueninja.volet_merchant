@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { Icon, Thumbnail } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
-import DatePicker from "react-native-datepicker";
+import DatePicker from "react-native-date-picker";
 export const { width, height } = Dimensions.get("window");
 import { Dropdown } from "react-native-material-dropdown";
 import { dev, prod, url } from "../../../config";

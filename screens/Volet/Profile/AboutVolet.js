@@ -31,13 +31,13 @@ export class AboutVolet extends Component {
             navigation={this.props.navigation}
             page={"ContactSupport"}
           />
-          {/* <ListButton
+          <ListButton
             title={"Feed & Ratings"}
             extraProps={this.state.isFalse}
             icon={require("../../../assets/glasses.png")}
             navigation={this.props.navigation}
             page={"Feedback"}
-          /> */}
+          />
           <ListButton
             title={"Policies"}
             extraProps={this.state.isFalse}

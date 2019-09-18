@@ -10,6 +10,7 @@ import FAQ from "./FAQ";
 import Policies from "./Policies";
 import ReviewRatings from "./ReviewRatings";
 import ContactSupport from "./ContactSupport";
+import Feedback from "./Feedback";
 
 const MyProfileScreen = ({ navigation }) => <Profile navigation={navigation} />;
 MyProfileScreen.navigationOptions = {
@@ -94,6 +95,17 @@ MyContactSupportScreen.navigationOptions = {
   }
 };
 
+const MyFeedbackScreen = ({ navigation }) => (
+  <Feedback navigation={navigation} />
+);
+MyFeedbackScreen.navigationOptions = {
+  mode: "card",
+  title: "Feedback & Ratings",
+  headerStyle: {
+    backgroundColor: "white"
+  }
+};
+
 const ModalStack = createStackNavigator(
   {
     Profile: {
@@ -122,10 +134,12 @@ const ModalStack = createStackNavigator(
     },
     ContactSupport: {
       screen: MyContactSupportScreen
+    },
+    Feedback: {
+      screen: MyFeedbackScreen
     }
   },
   {
-    headerMode: "float",
     defaultNavigationOptions: {
       header: null
     }

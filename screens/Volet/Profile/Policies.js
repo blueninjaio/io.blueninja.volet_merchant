@@ -1,16 +1,24 @@
 import React, { Component } from "react";
-import { Text, View, ScrollView, StyleSheet, Alert } from "react-native";
+import {
+  Text,
+  View,
+  ScrollView,
+  StyleSheet,
+  Alert,
+  SafeAreaView,
+  Dimensions
+} from "react-native";
 import { dev, prod, url } from "../../../config";
 
 export class Policies extends Component {
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-             policies: []
-        }
-    }
-    
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      policies: []
+    };
+  }
+
   /**
   |--------------------------------------------------
   | Implementation of Get Policies
@@ -47,16 +55,21 @@ export class Policies extends Component {
   };
   render() {
     return (
-      <View style={styles.container}>   
-            <View style={{justifyContent:"center", alignItems:"center"}}>
-                {
-                    this.state.policies.map((x, i) => (
-                        <View key={i} style={{alignItems:"flex-start", justifyContent:"center",  paddingBottom: 20}}>
-                            <Text>{x.policies}</Text>
-                        </View>
-                    ))
-                }
+      <View style={styles.container}>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          {this.state.policies.map((x, i) => (
+            <View
+              key={i}
+              style={{
+                alignItems: "flex-start",
+                justifyContent: "center",
+                paddingBottom: 20
+              }}
+            >
+              <Text>{x.policies}</Text>
             </View>
+          ))}
+        </View>
       </View>
     );
   }
@@ -64,13 +77,12 @@ export class Policies extends Component {
 
 export default Policies;
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff"
-    },
-    text: {
-      color: "#979797",
-      fontSize: 20
-    }
-  });
-  
+  container: {
+    flex: 1,
+    backgroundColor: "#fff"
+  },
+  text: {
+    color: "#979797",
+    fontSize: 20
+  }
+});
