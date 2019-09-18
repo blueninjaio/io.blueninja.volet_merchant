@@ -52,7 +52,7 @@ const post = async (route, body) => {
 
 export default {
   login: async (login_input, password) => {
-    return post("/merchants/login", { login_input, password });
+    return post("/users", { login_input, password });
   },
   sendTAC: async contact => {
     return post("/tac/new", { contact });
