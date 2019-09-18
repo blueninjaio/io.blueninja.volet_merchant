@@ -110,8 +110,9 @@ const ModalStack = createStackNavigator(
     }
   },
   {
+    headerMode: "float",
     defaultNavigationOptions: {
-      // header: null
+      header: null
     }
   }
 );

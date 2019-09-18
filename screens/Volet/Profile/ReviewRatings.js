@@ -5,7 +5,7 @@ export default class ReviewRatings extends Component {
   render() {
     return (
       <View>
-        <Text> textInComponent </Text>
+        <Text> Add business to view reviews and ratings </Text>
       </View>
     );
   }
