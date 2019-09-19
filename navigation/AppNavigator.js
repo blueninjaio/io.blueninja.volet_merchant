@@ -5,9 +5,9 @@ import {
   createStackNavigator,
   createAppContainer
 } from "react-navigation";
-import { View, Image, Dimensions } from "react-native";
+import { Image, Dimensions } from "react-native";
 
-const { width, height } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 import Icon from "react-native-vector-icons/Ionicons";
 
@@ -24,15 +24,15 @@ const UserTabNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) =>
           tintColor === "black" ? (
             <Image
-              source={require("../assets/homeInactive.png")}
+              source={require("../assets/Home.png")}
               resizeMode="contain"
-              style={{ width: 30, height: 30 }}
+              style={{ width: 103, height: 90, marginTop: 12 }}
             />
           ) : (
             <Image
-              source={require("../assets/home.png")}
+              source={require("../assets/Home_active.png")}
               resizeMode="contain"
-              style={{ width: 30, height: 30 }}
+              style={{ width: 103, height: 90, marginTop: 12 }}
             />
           )
       }
@@ -70,7 +70,7 @@ const UserTabNavigator = createBottomTabNavigator(
             <Image
               source={require("../assets/businessActive.png")}
               resizeMode="contain"
-              style={{ width: 60, height: 70 }}
+              style={{ width: 103, height: 90, marginTop: -10 }}
             />
           )
       }
@@ -81,15 +81,15 @@ const UserTabNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) =>
           tintColor === "black" ? (
             <Image
-              source={require("../assets/profileInactive.png")}
+              source={require("../assets/Profile.png")}
               resizeMode="contain"
-              style={{ width: 30, height: 30 }}
+              style={{ width: 103, height: 90, marginTop: 12 }}
             />
           ) : (
             <Image
-              source={require("../assets/profile.png")}
+              source={require("../assets/Profile_active.png")}
               resizeMode="contain"
-              style={{ width: 40, height: 40 }}
+              style={{ width: 103, height: 90, marginTop: 12 }}
             />
           )
       }

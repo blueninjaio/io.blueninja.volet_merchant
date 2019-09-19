@@ -37,14 +37,14 @@ export class Profile extends React.Component {
 
   getUserID = async () => {
     try {
-      let id = await AsyncStorage.getItem("ID");
-      let username = await AsyncStorage.getItem("firstname");
-      let contact = await AsyncStorage.getItem("contact");
+      const [id, username, contact] = await Promise.all([
+        AsyncStorage.getItem("ID"),
+        AsyncStorage.getItem("firstname"),
+        AsyncStorage.getItem("contact")
+      ]);
 
       if (id !== null) {
-        this.setState({ id });
-        this.setState({ username });
-        this.setState({ contact });
+        this.setState({ id, username, contact });
       }
     } catch (error) {
       Alert.alert(
@@ -60,33 +60,45 @@ export class Profile extends React.Component {
     const list = [
       {
         screen: "PersonalDetails",
-        img: require("../../../assets/profile.png"),
-        title: "Personal Details"
+        img: require("../../../assets/human.png"),
+        title: "Personal Details",
+        width: 32,
+        height: 30
       },
       {
         screen: "",
         img: require("../../../assets/piggy.png"),
-        title: "Withdraw Volet"
+        title: "Withdraw Volet",
+        width: 40,
+        height: 40
       },
       {
         screen: "",
         img: require("../../../assets/transaction.png"),
-        title: "Transaction History"
+        title: "Transaction History",
+        width: 40,
+        height: 40
       },
       {
         screen: "",
         img: require("../../../assets/directP.png"),
-        title: "Billing Method"
+        title: "Billing Method",
+        width: 40,
+        height: 40
       },
       {
         screen: "ReviewRatings",
         img: require("../../../assets/pen.png"),
-        title: "Review and Ratings"
+        title: "Review and Ratings",
+        width: 40,
+        height: 40
       },
       {
         screen: "Setting",
         img: require("../../../assets/config.png"),
-        title: "Settings"
+        title: "Settings",
+        width: 40,
+        height: 40
       }
     ];
     return (
@@ -149,7 +161,7 @@ export class Profile extends React.Component {
                     <Image
                       source={x.img}
                       resizeMode="contain"
-                      style={{ width: 40, height: 40 }}
+                      style={{ width: x.width, height: x.height }}
                     />
                     <Text style={styles.listItemText}>{x.title}</Text>
                   </View>
