@@ -21,13 +21,6 @@ export class Security extends Component {
         icon: require("../../../assets/glasses.png"),
         navigation: this.props.navigation,
         page: "ResetPassword"
-      },
-      {
-        title: "Reset Pin",
-        extraProps: this.state.isFalse,
-        icon: require("../../../assets/glasses.png"),
-        navigation: this.props.navigation,
-        page: "ResetPassword"
       }
     ];
     return (

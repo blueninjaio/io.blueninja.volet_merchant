@@ -76,31 +76,16 @@ export class Logout extends Component {
 | Remove Notification Token
 |--------------------------------------------------
 */
-  removeNotificationToken = () => {
-    fetch(`${url}/api/merchants/removePush`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8"
-      },
-      body: JSON.stringify({
-        email: this.state.email
-      })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success === true) {
-          this.props.logMeIn();
-        }
-      })
-      .catch(error => {
-        Alert.alert(
-          "Error connecting to server",
-          `${error}`,
-          [{ text: "OK", onPress: () => null }],
-          { cancelable: false }
-        );
-      });
+  removeNotificationToken = async () => {
+    const [token, tac_token] = await Promise.all([
+      AsyncStorage.getItem("token"),
+      AsyncStorage.getItem("tac_token")
+    ]);
+    await AsyncStorage.clear();
+
+    if (token && tac_token) {
+      this.props.navigation.navigate("Login");
+    }
   };
 
   render() {

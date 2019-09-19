@@ -16,8 +16,8 @@ export class ForgetPassword extends Component {
     super(props);
 
     this.state = {
-      contact: "",
-      tempPassword: ""
+      old: "",
+      new: ""
     };
   }
 
