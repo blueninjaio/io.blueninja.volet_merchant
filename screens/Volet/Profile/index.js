@@ -13,6 +13,8 @@ import ContactSupport from "./ContactSupport";
 import Feedback from "./Feedback";
 import Security from "./Security";
 import ResetPassword from "./ResetPassword";
+import FPTac from "./FPTac";
+import ConfirmPassword from "./ConfirmPassword";
 
 const MyProfileScreen = ({ navigation }) => <Profile navigation={navigation} />;
 MyProfileScreen.navigationOptions = {
@@ -130,6 +132,26 @@ MyResetPasswordScreen.navigationOptions = {
   }
 };
 
+const MyFPTacScreen = ({ navigation }) => <FPTac navigation={navigation} />;
+MyFPTacScreen.navigationOptions = {
+  mode: "card",
+  title: "Reset Password",
+  headerStyle: {
+    backgroundColor: "white"
+  }
+};
+
+const MyConfirmPasswordScreen = ({ navigation }) => (
+  <ConfirmPassword navigation={navigation} />
+);
+MyConfirmPasswordScreen.navigationOptions = {
+  mode: "card",
+  title: "Reset Password",
+  headerStyle: {
+    backgroundColor: "white"
+  }
+};
+
 const ModalStack = createStackNavigator(
   {
     Profile: {
@@ -167,6 +189,12 @@ const ModalStack = createStackNavigator(
     },
     ResetPassword: {
       screen: MyResetPasswordScreen
+    },
+    FPTac: {
+      screen: MyFPTacScreen
+    },
+    ConfirmPassword: {
+      screen: MyConfirmPasswordScreen
     }
   },
   {

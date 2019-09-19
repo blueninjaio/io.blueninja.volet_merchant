@@ -90,5 +90,13 @@ export default {
   },
   editInfo: async body => {
     return post("/users/edit", body);
+  },
+  confirmPassword: async (temporary_password, email, contact, new_password) => {
+    return post("/users/resetPassword", {
+      temporary_password,
+      email,
+      contact,
+      new_password
+    });
   }
 };

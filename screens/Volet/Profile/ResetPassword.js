@@ -6,7 +6,8 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
-  SafeAreaView
+  SafeAreaView,
+  AsyncStorage
 } from "react-native";
 import { LinearGradient } from "expo";
 
@@ -16,10 +17,37 @@ export class ForgetPassword extends Component {
     super(props);
 
     this.state = {
-      old: "",
-      new: ""
+      contact: "",
+      token: "",
+      oldPwd: ""
     };
   }
+
+  componentDidMount() {
+    this.onLoad();
+  }
+
+  onLoad = async () => {
+    const [contact, token] = await Promise.all([
+      AsyncStorage.getItem("contact"),
+      AsyncStorage.getItem("token")
+    ]);
+
+    this.setState({ contact, token });
+  };
+
+  onActionResetPassword = () => {
+    const oldPwd = this.state.oldPwd;
+    this.setState({ oldPwd });
+
+    if (oldPwd !== "") {
+      this.props.navigation.navigate("FPTac", {
+        contact: this.state.contact,
+        token: this.state.token,
+        oldPwd: this.state.oldPwd
+      });
+    }
+  };
 
   render() {
     return (
@@ -75,8 +103,8 @@ export class ForgetPassword extends Component {
                   borderBottomColor: "#5B86E5",
                   fontSize: 13
                 }}
-                // onChangeText={firstName => this.setState({ firstName })}
-                // value={this.state.firstName}
+                onChangeText={oldPwd => this.setState({ oldPwd })}
+                value={this.state.oldPwd}
                 type="text"
                 placeholder="First name"
                 placeholderTextColor="rgb(74,74,74)"
@@ -89,7 +117,10 @@ export class ForgetPassword extends Component {
             colors={["#36D1DC", "#5B86E5"]}
             style={styles.buttonStyle}
           >
-            <TouchableOpacity style={styles.buttonStyle}>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={this.onActionResetPassword}
+            >
               <Text style={styles.loginText}>Next</Text>
             </TouchableOpacity>
           </LinearGradient>
