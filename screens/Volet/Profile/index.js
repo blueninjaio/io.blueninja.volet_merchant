@@ -11,6 +11,7 @@ import Policies from "./Policies";
 import ReviewRatings from "./ReviewRatings";
 import ContactSupport from "./ContactSupport";
 import Feedback from "./Feedback";
+import Security from "./Security";
 
 const MyProfileScreen = ({ navigation }) => <Profile navigation={navigation} />;
 MyProfileScreen.navigationOptions = {
@@ -106,6 +107,17 @@ MyFeedbackScreen.navigationOptions = {
   }
 };
 
+const MySecurityScreen = ({ navigation }) => (
+  <Security navigation={navigation} />
+);
+MySecurityScreen.navigationOptions = {
+  mode: "card",
+  title: "Security",
+  headerStyle: {
+    backgroundColor: "white"
+  }
+};
+
 const ModalStack = createStackNavigator(
   {
     Profile: {
@@ -137,6 +149,9 @@ const ModalStack = createStackNavigator(
     },
     Feedback: {
       screen: MyFeedbackScreen
+    },
+    Security: {
+      screen: MySecurityScreen
     }
   },
   {

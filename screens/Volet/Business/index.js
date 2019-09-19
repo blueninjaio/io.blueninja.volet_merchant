@@ -29,7 +29,11 @@ const MySellerAccScreen = ({ tabBar, navigation }) => (
   <SellerAcc navigation={navigation} />
 );
 MySellerAccScreen.navigationOptions = {
-  header: null
+  mode: "card",
+  title: "Business",
+  headerStyle: {
+    backgroundColor: "white"
+  }
 };
 
 const MyBusinessInfoScreen = ({ navigation }) => (
@@ -134,7 +138,7 @@ const ModalStack = createStackNavigator(
   },
   {
     defaultNavigationOptions: {
-      header: null
+      // header: null
     }
   }
 );

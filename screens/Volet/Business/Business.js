@@ -114,10 +114,10 @@ export class Business extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <NavigationEvents
+        {/* <NavigationEvents
           onWillFocus={payload => this.getUserInfo()}
           onWillFocus={payload => this.addBusiness()}
-        />
+        /> */}
         <TouchableOpacity
           style={{
             alignItems: "center",
