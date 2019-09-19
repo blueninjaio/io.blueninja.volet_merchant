@@ -57,6 +57,38 @@ export class Profile extends React.Component {
   };
 
   render() {
+    const list = [
+      {
+        screen: "PersonalDetails",
+        img: require("../../../assets/profile.png"),
+        title: "Personal Details"
+      },
+      {
+        screen: "",
+        img: require("../../../assets/piggy.png"),
+        title: "Withdraw Volet"
+      },
+      {
+        screen: "",
+        img: require("../../../assets/transaction.png"),
+        title: "Transaction History"
+      },
+      {
+        screen: "",
+        img: require("../../../assets/directP.png"),
+        title: "Billing Method"
+      },
+      {
+        screen: "ReviewRatings",
+        img: require("../../../assets/pen.png"),
+        title: "Review and Ratings"
+      },
+      {
+        screen: "Setting",
+        img: require("../../../assets/config.png"),
+        title: "Settings"
+      }
+    ];
     return (
       <View style={styles.container}>
         <StatusBar />
@@ -104,104 +136,26 @@ export class Profile extends React.Component {
               </Text>
             </LinearGradient>
           </View>
+
+          {/* List of navigation */}
           <View>
-            <View style={styles.shadowSet}>
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate("PersonalDetails")
-                }
-                style={styles.listItemButton}
-              >
-                <View style={styles.show}>
-                  <Image
-                    source={require("../../../assets/profile.png")}
-                    resizeMode="contain"
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.listItemText}>Personal Details</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.shadowSet}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("DeepWorks")}
-                style={styles.listItemButton}
-              >
-                <View style={styles.show}>
-                  <Image
-                    source={require("../../../assets/piggy.png")}
-                    resizeMode="contain"
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.listItemText}>Withdraw Volet</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.shadowSet}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("DeepWorks")}
-                style={styles.listItemButton}
-              >
-                <View style={styles.show}>
-                  <Image
-                    source={require("../../../assets/transaction.png")}
-                    resizeMode="contain"
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.listItemText}>Transaction History</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.shadowSet}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("DeepWorks")}
-                style={styles.listItemButton}
-              >
-                <View style={styles.show}>
-                  <Image
-                    source={require("../../../assets/directP.png")}
-                    resizeMode="contain"
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.listItemText}>Billing Method</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.shadowSet}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("ReviewRatings")}
-                style={styles.listItemButton}
-              >
-                <View style={styles.show}>
-                  <Image
-                    source={require("../../../assets/pen.png")}
-                    resizeMode="contain"
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.listItemText}>Reviews and Ratings</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.shadowSet}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Setting")}
-                style={styles.listItemButton}
-              >
-                <View style={styles.show}>
-                  <Image
-                    source={require("../../../assets/config.png")}
-                    resizeMode="contain"
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.listItemText}>Settings</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+            {list.map((x, i) => (
+              <View style={styles.shadowSet} key={i}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate(x.screen)}
+                  style={styles.listItemButton}
+                >
+                  <View style={styles.show}>
+                    <Image
+                      source={x.img}
+                      resizeMode="contain"
+                      style={{ width: 40, height: 40 }}
+                    />
+                    <Text style={styles.listItemText}>{x.title}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
           </View>
         </ScrollView>
       </View>

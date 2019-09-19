@@ -19,7 +19,6 @@ export class ListButton extends Component {
         >
           <View style={styles.show}>
             <Image
-              //   source={{uri: this.props.icon}}
               source={this.props.icon}
               resizeMode="contain"
               style={{ width: 40, height: 40 }}
@@ -31,7 +30,6 @@ export class ListButton extends Component {
               <Text style={styles.listItemText}>{this.props.desc}</Text>
             </View>
           ) : null}
-          {/* <Switch value={true} /> */}
         </TouchableOpacity>
       </View>
     );
