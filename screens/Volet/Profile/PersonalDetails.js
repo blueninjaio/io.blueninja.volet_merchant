@@ -12,6 +12,7 @@ import { Icon, Thumbnail } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
 import { ImagePicker, Permissions, LinearGradient } from "expo";
+import api from "../../../api/index";
 
 export class PersonalDetails extends Component {
   constructor(props) {
@@ -58,6 +59,7 @@ export class PersonalDetails extends Component {
     console.log("Image link", result); // this logs correctly
     if (!result.cancelled) {
       this.setState({ imageUri: result.uri });
+
       // TODO: why isn't this showing up inside the Image on screen?
     }
   };
@@ -69,6 +71,37 @@ export class PersonalDetails extends Component {
     if (!cancelled) {
       this.setState({ imgUri: uri });
     }
+  };
+
+  inputCheck = () => {
+    const { firstName, lastName, email, address, imageUri } = this.state;
+
+    let formData = new FormData();
+    formData.append("f_name", firstName);
+    formData.append("l_name", lastName);
+    formData.append("email", email);
+    formData.append("address", address);
+    formData.append("image", imageUri);
+
+    console.log(formData);
+
+    api
+      .editInfo(formData)
+      .then(data => {
+        if (data.success === true) {
+          console.log("Personal Details", data);
+        } else alert(data.message);
+      })
+      .catch(err => {
+        console.log("Error for personal details:", err);
+
+        Alert.alert(
+          "Error connecting to server",
+          `Please try again later`,
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+      });
   };
 
   render() {
@@ -218,7 +251,7 @@ export class PersonalDetails extends Component {
                   borderBottomColor: "#5B86E5",
                   fontSize: 13
                 }}
-                onChangeText={contact => this.setState({ contact })}
+                // onChangeText={contact => this.setState({ contact })}
                 value={this.state.contact}
                 type="number"
                 placeholder="First name"
@@ -245,7 +278,7 @@ export class PersonalDetails extends Component {
                   borderBottomColor: "#5B86E5",
                   fontSize: 13
                 }}
-                onChangeText={id => this.setState({ address })}
+                onChangeText={address => this.setState({ address })}
                 value={this.state.address}
                 type="text"
                 placeholder="Address"

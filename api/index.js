@@ -19,22 +19,18 @@ const get = async route => {
 const post = async (route, body) => {
   let token = AsyncStorage.getItem("token");
   let tac_token = await AsyncStorage.getItem("tac_token");
-  console.log("Tac token", tac_token);
 
-  if (route !== "/merchants") {
+  if (route === "/users/edit") {
     let response = await fetch(`${url}${route}`, {
       method: "POST",
       mode: "cors",
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json; charset=utf-8",
-        Accept: "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify(body)
+      body: body
     });
     return await response.json();
-  } else if (route === "/merchants") {
+  } else if (route === "/users") {
     let response = await fetch(`${url}${route}`, {
       method: "POST",
       mode: "cors",
@@ -43,6 +39,19 @@ const post = async (route, body) => {
         "Content-Type": "application/json; charset=utf-8",
         Accept: "application/json1",
         "x-tac-token": `${tac_token}`
+      },
+      body: JSON.stringify(body)
+    });
+    return await response.json();
+  } else if (route !== "/users") {
+    let response = await fetch(`${url}${route}`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(body)
     });
@@ -78,5 +87,8 @@ export default {
       email,
       password
     });
+  },
+  editInfo: async body => {
+    return post("/users/edit", body);
   }
 };

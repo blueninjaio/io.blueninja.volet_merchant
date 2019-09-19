@@ -63,7 +63,8 @@ export class Profile extends React.Component {
         img: require("../../../assets/human.png"),
         title: "Personal Details",
         width: 32,
-        height: 30
+        height: 30,
+        marginRight: 10
       },
       {
         screen: "",
@@ -161,7 +162,11 @@ export class Profile extends React.Component {
                     <Image
                       source={x.img}
                       resizeMode="contain"
-                      style={{ width: x.width, height: x.height }}
+                      style={{
+                        width: x.width,
+                        height: x.height,
+                        marginRight: x.marginRight
+                      }}
                     />
                     <Text style={styles.listItemText}>{x.title}</Text>
                   </View>
