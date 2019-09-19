@@ -12,6 +12,7 @@ import ReviewRatings from "./ReviewRatings";
 import ContactSupport from "./ContactSupport";
 import Feedback from "./Feedback";
 import Security from "./Security";
+import ResetPassword from "./ResetPassword";
 
 const MyProfileScreen = ({ navigation }) => <Profile navigation={navigation} />;
 MyProfileScreen.navigationOptions = {
@@ -118,6 +119,17 @@ MySecurityScreen.navigationOptions = {
   }
 };
 
+const MyResetPasswordScreen = ({ navigation }) => (
+  <ResetPassword navigation={navigation} />
+);
+MyResetPasswordScreen.navigationOptions = {
+  mode: "card",
+  title: "Reset Password",
+  headerStyle: {
+    backgroundColor: "white"
+  }
+};
+
 const ModalStack = createStackNavigator(
   {
     Profile: {
@@ -152,6 +164,9 @@ const ModalStack = createStackNavigator(
     },
     Security: {
       screen: MySecurityScreen
+    },
+    ResetPassword: {
+      screen: MyResetPasswordScreen
     }
   },
   {

@@ -17,15 +17,17 @@ export class Security extends Component {
     const list = [
       {
         title: "Reset Password",
-        extraProps: this.state.isTrue,
+        extraProps: this.state.isFalse,
         icon: require("../../../assets/glasses.png"),
-        navigation: this.props.navigation
+        navigation: this.props.navigation,
+        page: "ResetPassword"
       },
       {
         title: "Reset Pin",
-        extraProps: this.state.isTrue,
+        extraProps: this.state.isFalse,
         icon: require("../../../assets/glasses.png"),
-        navigation: this.props.navigation
+        navigation: this.props.navigation,
+        page: "ResetPassword"
       }
     ];
     return (
@@ -37,6 +39,7 @@ export class Security extends Component {
             extraProps={x.extraProps}
             icon={x.icon}
             navigation={x.navigation}
+            page={x.page}
           />
         ))}
       </View>
