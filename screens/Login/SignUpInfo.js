@@ -71,30 +71,33 @@ export class SignUpInfo extends Component {
         password
       )
       .then(data => {
+        console.log(data);
         console.log("Sign Up :", data);
-        if (data.success === true) {
-          Alert.alert(
-            "Success",
-            `${data.message}`,
-            [{ text: "OK", onPress: () => this.reduxLogin() }],
-            { cancelable: false }
-          );
-        } else {
-          Alert.alert(
-            "Fail",
-            `${data.message}`,
-            [{ text: "OK", onPress: () => null }],
-            { cancelable: false }
-          );
-        }
+        this.reduxLogin();
+        // if (data.success === true) {
+        //   Alert.alert(
+        //     "Success",
+        //     `${data.message}`,
+        //     [{ text: "OK", onPress: () => this.reduxLogin() }],
+        //     { cancelable: false }
+        //   );
+        // } else {
+        //   Alert.alert(
+        //     "Fail",
+        //     `${data.message}`,
+        //     [{ text: "OK", onPress: () => null }],
+        //     { cancelable: false }
+        //   );
+        // }
       })
       .catch(error => {
-        Alert.alert(
-          "Error connecting to server",
-          `Please check your internet or try again later`,
-          [{ text: "OK", onPress: () => null }],
-          { cancelable: false }
-        );
+        console.log(error);
+        // Alert.alert(
+        //   "Error connecting to server",
+        //   `Please check your internet or try again later`,
+        //   [{ text: "OK", onPress: () => null }],
+        //   { cancelable: false }
+        // );
       });
   };
 
