@@ -25,7 +25,7 @@ export class SignUp extends Component {
 
   onActionSendTAC = () => {
     api
-      .sendTAC(this.state.number)
+      .sendTAC(`+60${this.state.number}`)
       .then(data => {
         if (data.success) {
           this.props.navigation.navigate("TAC", {
@@ -33,8 +33,8 @@ export class SignUp extends Component {
             requestMethod: "SignUp"
           });
         }
-        alert(data.message);
-        console.log(data.message);
+        // alert(data.message);
+        console.log(data);
       })
       .catch(err => console.log(err));
   };
