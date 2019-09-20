@@ -9,8 +9,6 @@ import { Image, Dimensions } from "react-native";
 
 const { height } = Dimensions.get("window");
 
-import Icon from "react-native-vector-icons/Ionicons";
-
 import Home from "../screens/Volet/Home";
 import Statistic from "../screens/Volet/Statistic";
 import Business from "../screens/Volet/Business";
