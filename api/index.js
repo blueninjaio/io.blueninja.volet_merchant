@@ -2,7 +2,7 @@ import { url } from "../config/index";
 import { AsyncStorage } from "react-native";
 
 const get = async route => {
-  let token = AsyncStorage.getItem("token");
+  let token = await AsyncStorage.getItem("token");
   let response = await fetch(`${url}${route}`, {
     method: "GET",
     mode: "cors",
@@ -17,7 +17,7 @@ const get = async route => {
 };
 
 const post = async (route, body) => {
-  let token = AsyncStorage.getItem("token");
+  let token = await AsyncStorage.getItem("token");
   let tac_token = await AsyncStorage.getItem("tac_token");
 
   if (route === "/users/edit") {
@@ -29,6 +29,7 @@ const post = async (route, body) => {
       },
       body: body
     });
+
     return await response.json();
   } else if (route === "/users") {
     let response = await fetch(`${url}${route}`, {
@@ -42,6 +43,7 @@ const post = async (route, body) => {
       },
       body: JSON.stringify(body)
     });
+
     return await response.json();
   } else if (route !== "/users") {
     let response = await fetch(`${url}${route}`, {
@@ -81,7 +83,7 @@ export default {
     email,
     password
   ) => {
-    return post("/merchants", {
+    return post("/users", {
       facebook_id,
       google_id,
       contact,
@@ -101,5 +103,8 @@ export default {
       contact,
       new_password
     });
+  },
+  usersInfo: async () => {
+    return get("/users/me");
   }
 };
