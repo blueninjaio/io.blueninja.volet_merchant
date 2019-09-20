@@ -69,6 +69,9 @@ export default {
   checkTAC: async (contact, tac_code) => {
     return post("/tac/check", { contact, tac_code });
   },
+  checkExistingTAC: async contact => {
+    return post("/tac/contact", { contact });
+  },
   register: async (
     facebook_id,
     google_id,

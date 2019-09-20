@@ -48,21 +48,10 @@ export class FPTac extends Component {
 
     if (tacCode.length === 6) {
       api
-        .checkTAC(contact, tacCode)
+        .checkExistingTAC(contact)
         .then(data => {
           console.log("Valid Tac", data);
           if (data.success === true) {
-            // if (this.props.navigation.state.params.requestMethod === "SignUp")
-            //   this.props.navigation.navigate("SignUpInfo", {
-            //     contact: contact,
-            //     token: data.token
-            //   });
-            // else {
-            //   this.props.navigation.navigate("ForgetPassword", {
-            //     contact: this.props.navigation.state.params.contact,
-            //     token: data.token
-            //   })
-            // }
             this.props.navigation.navigate("ConfirmPassword", {
               contact: this.props.navigation.state.params.contact,
               token: this.props.navigation.state.params.token,
