@@ -106,7 +106,7 @@ export class ForgetPassword extends Component {
                 onChangeText={oldPwd => this.setState({ oldPwd })}
                 value={this.state.oldPwd}
                 type="text"
-                placeholder="First name"
+                placeholder="Password"
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>

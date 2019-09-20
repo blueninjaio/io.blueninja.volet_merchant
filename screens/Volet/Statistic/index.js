@@ -8,7 +8,8 @@ const MyStatisticScreen = ({ navigation }) => (
 );
 MyStatisticScreen.navigationOptions = {
   mode: "card",
-  header: null
+  title: "Statistic"
+  // header: null
 };
 
 const ModalStack = createStackNavigator(

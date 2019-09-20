@@ -26,6 +26,8 @@ import {
 } from "native-base";
 import { LinearGradient } from "expo";
 import NotificationList from "../../../component/NotificationList";
+import api from "../../../api/index";
+import { url } from "../../../config";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -41,7 +43,9 @@ export default class App extends React.Component {
         {
           title: "Sent RM 50 to Someone"
         }
-      ]
+      ],
+      userImage: "",
+      balance: 0
     };
   }
 
@@ -52,6 +56,7 @@ export default class App extends React.Component {
 */
   componentDidMount = () => {
     this.getUserID();
+    this.getVolet();
   };
 
   getUserID = async () => {
@@ -69,6 +74,32 @@ export default class App extends React.Component {
         [{ text: "OK", onPress: () => null }],
         { cancelable: false }
       );
+    }
+  };
+
+  getVolet = async () => {
+    try {
+      api
+        .usersInfo()
+        .then(data => {
+          if (data.success === true) {
+            this.setState({ balance: data.user.credits });
+
+            if (data.user.photo_url) {
+              this.setState({ userImage: data.user.photo_url });
+            }
+          }
+        })
+        .catch(error => {
+          Alert.alert(
+            "Error connecting to server Volet, from Home screen",
+            `${error}`,
+            [{ text: "OK", onPress: () => null }],
+            { cancelable: false }
+          );
+        });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -130,13 +161,23 @@ export default class App extends React.Component {
             </View>
           </LinearGradient>
           <View style={styles.userVolet}>
-            <Thumbnail
-              large
-              source={{
-                uri: `https://upload.wikimedia.org/wikipedia/en/0/0c/Give_Me_A_Try_single_cover.jpeg`
-              }}
-              style={{ backgroundColor: "grey", borderColor: "white" }}
-            />
+            {this.state.userImage !== "" ? (
+              <Thumbnail
+                large
+                source={{
+                  uri: `${url}/images/${this.state.userImage}`
+                }}
+                style={{ backgroundColor: "grey", borderColor: "white" }}
+              />
+            ) : (
+              <Thumbnail
+                large
+                source={{
+                  uri: `https://upload.wikimedia.org/wikipedia/en/0/0c/Give_Me_A_Try_single_cover.jpeg`
+                }}
+                style={{ backgroundColor: "grey", borderColor: "white" }}
+              />
+            )}
             <View style={styles.voletBalance}>
               <Text
                 style={{
@@ -148,7 +189,9 @@ export default class App extends React.Component {
               >
                 Your Volet Balance
               </Text>
-              <Text style={{ fontSize: 25, fontWeight: "bold" }}>RM200.00</Text>
+              <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+                RM{this.state.balance}
+              </Text>
             </View>
           </View>
           <View style={styles.payments}>
@@ -169,29 +212,7 @@ export default class App extends React.Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
-        <TouchableOpacity style={styles.qrcode}>
-          <Card style={{ width: width }}>
-            <CardItem>
-              <Body
-                style={{
-                  padding: 5,
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                <Image
-                  source={require("../../../assets/qrcode.png")}
-                  resizeMode="contain"
-                  style={{ width: 20, height: 20 }}
-                />
-                <Text style={{ paddingLeft: 10 }}>
-                  Swipe up To scan OR Code
-                </Text>
-              </Body>
-            </CardItem>
-          </Card>
-        </TouchableOpacity>
+
         {this.state.isVisible === true ? (
           <View
             style={{

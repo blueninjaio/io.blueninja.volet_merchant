@@ -54,11 +54,12 @@ export class PersonalDetails extends Component {
   _onChoosePic = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [4, 3]
+      aspect: [4, 3],
+      base64: true
     });
     console.log("Image link", result); // this logs correctly
     if (!result.cancelled) {
-      this.setState({ imageUri: result.uri });
+      this.setState({ imageUri: result.base64 });
 
       // TODO: why isn't this showing up inside the Image on screen?
     }
@@ -81,13 +82,14 @@ export class PersonalDetails extends Component {
     formData.append("l_name", lastName);
     formData.append("email", email);
     formData.append("address", address);
-    formData.append("image", imageUri);
+    formData.append("image", `data:image/jpg;base64,${imageUri}`);
 
     console.log(formData);
 
     api
       .editInfo(formData)
       .then(data => {
+        console.log("data: ", data);
         if (data.success === true) {
           console.log("Personal Details", data);
         } else alert(data.message);
@@ -254,7 +256,7 @@ export class PersonalDetails extends Component {
                 // onChangeText={contact => this.setState({ contact })}
                 value={this.state.contact}
                 type="number"
-                placeholder="First name"
+                placeholder={this.state.contact}
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>

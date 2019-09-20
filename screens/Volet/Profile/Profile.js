@@ -13,7 +13,8 @@ import {
   Alert
 } from "react-native";
 import { LinearGradient } from "expo";
-import { NavigationEvents } from "react-navigation";
+import api from "../../../api/index";
+import { url } from "../../../config/index";
 
 export class Profile extends React.Component {
   constructor(props) {
@@ -22,7 +23,9 @@ export class Profile extends React.Component {
     this.state = {
       username: "",
       id: "",
-      contact: ""
+      contact: "",
+      balance: 0,
+      userImage: ""
     };
   }
 
@@ -33,6 +36,7 @@ export class Profile extends React.Component {
 */
   componentDidMount = () => {
     this.getUserID();
+    this.getVolet();
   };
 
   getUserID = async () => {
@@ -53,6 +57,26 @@ export class Profile extends React.Component {
         [{ text: "OK", onPress: () => null }],
         { cancelable: false }
       );
+    }
+  };
+
+  getVolet = async () => {
+    try {
+      api
+        .usersInfo()
+        .then(data => {
+          if (data.success === true) {
+            this.setState({ balance: data.user.credits });
+            if (data.user.photo_url) {
+              this.setState({ userImage: data.user.photo_url });
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -112,19 +136,36 @@ export class Profile extends React.Component {
             </Text>
           </LinearGradient>
           <View style={styles.userDetails}>
-            <Image
-              resizeMode="contain"
-              source={{
-                uri: `https://upload.wikimedia.org/wikipedia/en/0/0c/Give_Me_A_Try_single_cover.jpeg`
-              }}
-              style={{
-                backgroundColor: "grey",
-                borderColor: "white",
-                width: 120,
-                height: 120,
-                borderRadius: 60
-              }}
-            />
+            {this.state.userImage !== "" ? (
+              <Image
+                resizeMode="contain"
+                source={{
+                  uri: `${url}/images/${this.state.userImage}`
+                }}
+                style={{
+                  backgroundColor: "grey",
+                  borderColor: "white",
+                  width: 120,
+                  height: 120,
+                  borderRadius: 60
+                }}
+              />
+            ) : (
+              <Image
+                resizeMode="contain"
+                source={{
+                  uri: `https://upload.wikimedia.org/wikipedia/en/0/0c/Give_Me_A_Try_single_cover.jpeg`
+                }}
+                style={{
+                  backgroundColor: "grey",
+                  borderColor: "white",
+                  width: 120,
+                  height: 120,
+                  borderRadius: 60
+                }}
+              />
+            )}
+
             <View style={styles.userImage}>
               <Text
                 style={{ fontWeight: "bold", fontSize: 17, marginLeft: 10 }}
@@ -132,7 +173,7 @@ export class Profile extends React.Component {
                 {this.state.username}
               </Text>
             </View>
-            <Text style={{ paddingTop: 10 }}>+{this.state.contact}</Text>
+            <Text style={{ paddingTop: 10 }}>{this.state.contact}</Text>
           </View>
           <View style={styles.voletContainer}>
             <LinearGradient
@@ -145,7 +186,7 @@ export class Profile extends React.Component {
               <Text
                 style={{ color: "white", fontSize: 18, fontWeight: "bold" }}
               >
-                RM 200.00
+                RM {this.state.balance}
               </Text>
             </LinearGradient>
           </View>
