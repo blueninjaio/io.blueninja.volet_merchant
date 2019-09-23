@@ -17,48 +17,23 @@ const get = async route => {
 };
 
 const post = async (route, body) => {
+  console.log(body);
+  console.log(`${url}${route}`);
   let token = await AsyncStorage.getItem("token");
   let tac_token = await AsyncStorage.getItem("tac_token");
-
-  if (route === "/users/edit") {
-    let response = await fetch(`${url}${route}`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      body: body
-    });
-
-    return await response.json();
-  } else if (route === "/users") {
-    let response = await fetch(`${url}${route}`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json; charset=utf-8",
-        Accept: "application/json1",
-        "x-tac-token": `${tac_token}`
-      },
-      body: JSON.stringify(body)
-    });
-
-    return await response.json();
-  } else if (route !== "/users") {
-    let response = await fetch(`${url}${route}`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json; charset=utf-8",
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(body)
-    });
-    return await response.json();
-  }
+  let response = await fetch(`${url}${route}`, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json; charset=utf-8",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+      "x-tac-token": `${tac_token}`
+    },
+    body: body instanceof FormData ? body : JSON.stringify(body)
+  });
+  return await response.json();
 };
 
 export default {

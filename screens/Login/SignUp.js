@@ -24,6 +24,7 @@ export class SignUp extends Component {
   }
 
   onActionSendTAC = () => {
+    console.log("Bye");
     api
       .sendTAC(`+60${this.state.number}`)
       .then(data => {

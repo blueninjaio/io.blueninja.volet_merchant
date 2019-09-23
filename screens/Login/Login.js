@@ -35,6 +35,7 @@ export class Login extends Component {
   |--------------------------------------------------
   */
   reduxLogin = () => {
+    console.log("Hello");
     if (this.state.email.length < 5 || !this.state.email.includes("@"))
       alert(`Please enter a valid email address.`);
     else if (this.state.password.length < 6) alert(`Please enter a password.`);
