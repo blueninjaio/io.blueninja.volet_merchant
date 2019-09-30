@@ -6,7 +6,9 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  Alert,
+  AsyncStorage
 } from "react-native";
 import { Icon, Thumbnail } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
@@ -24,7 +26,8 @@ export class PersonalDetails extends Component {
       email: "",
       contact: "",
       address: "",
-      imageUri: ""
+      imageUri: "",
+      user: {}
     };
   }
 
@@ -84,14 +87,20 @@ export class PersonalDetails extends Component {
     formData.append("address", address);
     formData.append("image", `data:image/jpg;base64,${imageUri}`);
 
-    console.log(formData);
+    const body = {
+      f_name: firstName,
+      l_name: lastName,
+      email,
+      address,
+      imageUri
+    };
 
     api
-      .editInfo(formData)
+      .editInfo(body)
       .then(data => {
         console.log("data: ", data);
         if (data.success === true) {
-          console.log("Personal Details", data);
+          this.setState({ user: data.user });
         } else alert(data.message);
       })
       .catch(err => {
@@ -137,7 +146,6 @@ export class PersonalDetails extends Component {
 
               <TouchableOpacity
                 style={{
-                  //   justifyContent: "flex-start",
                   alignItems: "center",
                   flexDirection: "row",
                   paddingTop: 30
@@ -178,7 +186,7 @@ export class PersonalDetails extends Component {
                 onChangeText={firstName => this.setState({ firstName })}
                 value={this.state.firstName}
                 type="text"
-                placeholder="First name"
+                placeholder={this.state.user.f_name}
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>
@@ -204,7 +212,7 @@ export class PersonalDetails extends Component {
                 onChangeText={lastName => this.setState({ lastName })}
                 value={this.state.lastName}
                 type="text"
-                placeholder="Last name"
+                placeholder={this.state.user.l_name}
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>
@@ -230,7 +238,7 @@ export class PersonalDetails extends Component {
                 onChangeText={email => this.setState({ email })}
                 value={this.state.email}
                 type="text"
-                placeholder="Email"
+                placeholder={this.state.user.email}
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>
@@ -256,7 +264,7 @@ export class PersonalDetails extends Component {
                 // onChangeText={contact => this.setState({ contact })}
                 value={this.state.contact}
                 type="number"
-                placeholder={this.state.contact}
+                placeholder={this.state.user.contact}
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>
@@ -283,7 +291,7 @@ export class PersonalDetails extends Component {
                 onChangeText={address => this.setState({ address })}
                 value={this.state.address}
                 type="text"
-                placeholder="Address"
+                placeholder={this.state.user.address}
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>
