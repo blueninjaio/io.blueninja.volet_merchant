@@ -50,7 +50,6 @@ export class FPTac extends Component {
       api
         .checkExistingTAC(contact)
         .then(data => {
-          console.log("Valid Tac", data);
           if (data.success === true) {
             this.props.navigation.navigate("ConfirmPassword", {
               contact: this.props.navigation.state.params.contact,
