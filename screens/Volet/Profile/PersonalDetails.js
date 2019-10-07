@@ -38,6 +38,7 @@ export class PersonalDetails extends Component {
   */
   componentDidMount() {
     this.getPermissionAsync();
+    this.onLoadGetNumber();
   }
   getPermissionAsync = async () => {
     const permission = await Permissions.getAsync(Permissions.CAMERA_ROLL);
@@ -47,6 +48,12 @@ export class PersonalDetails extends Component {
         //its granted.
       }
     }
+  };
+
+  onLoadGetNumber = async () => {
+    const contact = await AsyncStorage.getItem("contact");
+    this.setState({ contact });
+    console.log("Personal Details contacts", contact);
   };
 
   /**
@@ -101,6 +108,7 @@ export class PersonalDetails extends Component {
         console.log("data: ", data);
         if (data.success === true) {
           this.setState({ user: data.user });
+          alert("Successfully Updated");
         } else alert(data.message);
       })
       .catch(err => {
@@ -123,8 +131,6 @@ export class PersonalDetails extends Component {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              // paddingLeft: 15,
-              // paddingRight: 20,
               marginTop: 30
             }}
           >
@@ -264,7 +270,7 @@ export class PersonalDetails extends Component {
                 // onChangeText={contact => this.setState({ contact })}
                 value={this.state.contact}
                 type="number"
-                placeholder={this.state.user.contact}
+                placeholder={this.state.contact}
                 placeholderTextColor="rgb(74,74,74)"
               />
             </View>

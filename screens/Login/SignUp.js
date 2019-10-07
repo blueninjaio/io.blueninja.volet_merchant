@@ -6,7 +6,8 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-  Image
+  Image,
+  AsyncStorage
 } from "react-native";
 import { LinearGradient } from "expo";
 import { TextInput } from "react-native-gesture-handler";
@@ -23,8 +24,7 @@ export class SignUp extends Component {
     };
   }
 
-  onActionSendTAC = () => {
-    console.log("Bye");
+  onActionSendTAC = async () => {
     api
       .sendTAC(`+60${this.state.number}`)
       .then(data => {
@@ -33,11 +33,20 @@ export class SignUp extends Component {
             contact: "+60" + this.state.number,
             requestMethod: "SignUp"
           });
+
+          console.log("Sign Up Contact: ", contact);
         }
-        // alert(data.message);
+
         console.log(data);
       })
       .catch(err => console.log(err));
+  };
+
+  onActionSaveNumber = async text => {
+    this.setState({
+      number: text.replace(/[^0-9]/g, "")
+    });
+    await AsyncStorage.setItem("contact", `+60${this.state.number}`);
   };
 
   render() {
@@ -98,11 +107,7 @@ export class SignUp extends Component {
                   borderBottomWidth: 1,
                   borderBottomColor: "#5B86E5"
                 }}
-                onChangeText={text =>
-                  this.setState({
-                    number: text.replace(/[^0-9]/g, "")
-                  })
-                }
+                onChangeText={text => this.onActionSaveNumber(text)}
                 value={this.state.number}
                 type="number"
                 placeholder="Your mobile number"

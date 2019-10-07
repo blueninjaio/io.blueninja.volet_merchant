@@ -14,9 +14,7 @@ import {
   LinearGradient,
   Notifications,
   Permissions,
-  LocalAuthentication,
-  Expo,
-  Constants
+  LocalAuthentication
 } from "expo";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
@@ -56,7 +54,6 @@ export class SignUpInfo extends Component {
     let l_name = this.state.lastName;
     let email = this.state.email;
     let password = this.state.password;
-    console.log("Sign up tac token:", this.props.navigation.state.params.token);
 
     AsyncStorage.setItem("tac_token", this.props.navigation.state.params.token);
 
@@ -71,33 +68,10 @@ export class SignUpInfo extends Component {
         password
       )
       .then(data => {
-        console.log(data);
-        console.log("Sign Up :", data);
         this.reduxLogin();
-        // if (data.success === true) {
-        //   Alert.alert(
-        //     "Success",
-        //     `${data.message}`,
-        //     [{ text: "OK", onPress: () => this.reduxLogin() }],
-        //     { cancelable: false }
-        //   );
-        // } else {
-        //   Alert.alert(
-        //     "Fail",
-        //     `${data.message}`,
-        //     [{ text: "OK", onPress: () => null }],
-        //     { cancelable: false }
-        //   );
-        // }
       })
       .catch(error => {
         console.log(error);
-        // Alert.alert(
-        //   "Error connecting to server",
-        //   `Please check your internet or try again later`,
-        //   [{ text: "OK", onPress: () => null }],
-        //   { cancelable: false }
-        // );
       });
   };
 
@@ -114,7 +88,6 @@ export class SignUpInfo extends Component {
       api
         .login(this.state.email, this.state.password)
         .then(data => {
-          console.log("Fetch Data: ", data);
           if (data.success) {
             this._storeData(data.token, data.merchant).then(() => {
               this.registerForPushNotificationsAsync();
@@ -147,7 +120,6 @@ export class SignUpInfo extends Component {
 */
   _storeData = async (token, userDetails) => {
     try {
-      // console.log("Saving")
       await AsyncStorage.setItem("token", token);
       await AsyncStorage.setItem("firstname", userDetails.f_name);
       await AsyncStorage.setItem("lastname", userDetails.l_name);
@@ -183,18 +155,6 @@ export class SignUpInfo extends Component {
     }
 
     let token = await Notifications.getExpoPushTokenAsync();
-
-    // return fetch(`${url}/api/merchants/updatePush`, {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     token: token,
-    //     email: this.state.email
-    //   })
-    // });
   };
   /**
   |--------------------------------------------------
