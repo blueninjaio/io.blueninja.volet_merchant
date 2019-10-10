@@ -11,7 +11,8 @@ import {
   Keyboard
 } from "react-native";
 export const { width, height } = Dimensions.get("window");
-import { url } from "../../../config";
+// import { url } from "../../../config";
+import api from '../../../api/index'
 import { LinearGradient } from "expo";
 
 export class ResetPassword extends Component {
@@ -32,20 +33,9 @@ export class ResetPassword extends Component {
     if (this.state.newPassword !== this.state.Cpassword) {
       alert("Password are not matching");
     } else {
-      fetch(`${url}/users/reset-password`, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          "x-tac-token": this.props.navigation.state.params.token
-        },
-        body: JSON.stringify({
-          old_password: this.state.oldPassword,
-          new_password: this.state.newPassword
-        })
-      })
-        .then(res => res.json())
-        .then(data => {
+      let token = await AsyncStorage.getItem("token");
+      api.confirmPassword(token, this.state.oldPassword, this.state.newPassword)
+      .then(data => {
           console.log("ResetPassword:", data);
           if (data.success === true) {
             Alert.alert(
@@ -60,8 +50,8 @@ export class ResetPassword extends Component {
               { cancelable: false }
             );
           }
-        })
-        .catch(error => {
+      })
+      .catch(error => {
           console.log("ResetPassword", error);
           Alert.alert(
             "Error connecting to server",
@@ -69,7 +59,7 @@ export class ResetPassword extends Component {
             [{ text: "OK", onPress: () => null }],
             { cancelable: false }
           );
-        });
+      });
     }
   };
 

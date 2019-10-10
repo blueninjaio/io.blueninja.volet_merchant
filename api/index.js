@@ -79,5 +79,12 @@ export default {
   },
   usersInfo: async () => {
     return get("/users/me");
+  },
+  confirmPassword: async (token, old_password, new_password) => {
+    return post("/users/reset-password", {
+      token,
+      old_password,
+      new_password
+    });
   }
 };
