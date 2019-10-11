@@ -39,13 +39,24 @@ export default {
     return post("/users/login", { login_input, password });
   },
   sendTAC: async contact => {
+    //register
     return post("/tac/new", { contact });
   },
+  sendTACByContact: async contact => {
+    //forgotPassword
+    return post("/tac/contact", { contact });
+  },
+  sendTACToUser: async () => {
+    //resetPassword
+    return post("/tac/user");
+  },
   checkTAC: async (contact, tac_code) => {
+    //check Both Register and Forgot Password
     return post("/tac/check", { contact, tac_code });
   },
-  checkExistingTAC: async contact => {
-    return post("/tac/contact", { contact });
+  checkUserTAC: async tac_code => {
+    // Reset Password
+    return post("/tac/check-user", { tac_code });
   },
   register: async (
     facebook_id,
