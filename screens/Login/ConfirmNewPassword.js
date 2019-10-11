@@ -16,7 +16,7 @@ export class ConfirmNewPassword extends Component {
 
     this.state = {
       password: "",
-      Cpassword:""
+      Cpassword: ""
     };
   }
 
@@ -123,9 +123,7 @@ export class ConfirmNewPassword extends Component {
           </View>
         </View>
         <View>
-          <TouchableOpacity
-            onPress={() => this.confirmPassword()}
-          >
+          <TouchableOpacity onPress={this.confirmPassword}>
             <Text>Confirm</Text>
           </TouchableOpacity>
         </View>
