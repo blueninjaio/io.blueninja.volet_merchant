@@ -19,22 +19,6 @@ export class App extends React.Component {
     try {
       const value = await AsyncStorage.getItem("token");
       if (value !== null) {
-        // fetch('http://139.59.18.237/api/driver/token', {
-        //     method: 'POST',
-        //     headers: {
-        //         "Content-Type": "application/json; charset=utf-8",
-        //     },
-        //     body: JSON.stringify({
-        //         token: value
-        //     })
-        // })
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         if (data.success) {
-        //             this.props.logMeIn();
-        //         }
-        //     })
-        //     .catch((error) => console.error(error))
         console.log("Token:", value);
       } else {
         console.log("No token found.");
