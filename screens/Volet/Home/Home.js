@@ -24,7 +24,7 @@ import {
   Title,
   Icon
 } from "native-base";
-import { LinearGradient } from "expo";
+import { LinearGradient } from 'expo-linear-gradient'
 import NotificationList from "../../../component/NotificationList";
 import api from "../../../api/index";
 import { url } from "../../../config";

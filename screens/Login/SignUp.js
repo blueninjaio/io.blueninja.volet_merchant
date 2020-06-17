@@ -6,9 +6,10 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-  Image
+  Image,
+  Alert
 } from "react-native";
-import { LinearGradient } from "expo";
+import { LinearGradient } from 'expo-linear-gradient'
 import { TextInput } from "react-native-gesture-handler";
 import api from "../../api/index";
 
@@ -27,11 +28,14 @@ export class SignUp extends Component {
     api
       .sendTAC(`+60${this.state.number}`)
       .then(data => {
+        console.log('data: ', data)
         if (data.success) {
           this.props.navigation.navigate("TAC", {
             contact: "+60" + this.state.number,
             requestMethod: "SignUp"
           });
+        } else {
+          Alert.alert('Error during signup', data.message)
         }
         // alert(data.message);
         console.log(data);

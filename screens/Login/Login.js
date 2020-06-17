@@ -14,7 +14,9 @@ import {
 import { Icon, Left, Body, Right } from "native-base";
 import { connect } from "react-redux";
 import { TextInput } from "react-native-gesture-handler";
-import { Notifications, Permissions, LinearGradient } from "expo";
+import { Notifications } from "expo";
+import * as Permissions from 'expo-permissions'
+import { LinearGradient } from 'expo-linear-gradient'
 import api from "../../api/index";
 
 const { width, height } = Dimensions.get("window");

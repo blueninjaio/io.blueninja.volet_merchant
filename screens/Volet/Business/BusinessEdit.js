@@ -18,7 +18,8 @@ import DatePicker from "react-native-date-picker";
 export const { width, height } = Dimensions.get("window");
 import { Dropdown } from "react-native-material-dropdown";
 import { dev, prod, url } from "../../../config";
-import { ImagePicker, Permissions } from "expo";
+import { ImagePicker } from "expo";
+import * as Permissions from 'expo-permissions'
 
 export class BusinessEdit extends Component {
   constructor(props) {

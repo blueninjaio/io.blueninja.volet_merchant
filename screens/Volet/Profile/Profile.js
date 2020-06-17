@@ -12,7 +12,7 @@ import {
   AsyncStorage,
   Alert
 } from "react-native";
-import { LinearGradient } from "expo";
+import { LinearGradient } from 'expo-linear-gradient'
 import api from "../../../api/index";
 import { url } from "../../../config/index";
 

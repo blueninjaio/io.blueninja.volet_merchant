@@ -1,5 +1,29 @@
 import { url } from "../config/index";
 import { AsyncStorage } from "react-native";
+import axios from 'axios'
+
+const api = axios.create({
+  baseURL: url,
+  timeout: 20000,
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  }
+})
+
+api.interceptors.request.use(config => {
+  console.log('config: ', config)
+  AsyncStorage.getItem('token')
+    .then(token => {
+      config = {
+        ...config,
+        headers: {
+          ...config.headers,
+          Authorization: `Bearer ${token}`
+        }
+      }
+      return config
+    })
+});
 
 const get = async route => {
   let token = await AsyncStorage.getItem("token");
@@ -106,5 +130,8 @@ export default {
   },
   usersInfo: async () => {
     return get("/users/me");
+  },
+  editInfo: async body => {
+    return api.post('/users/edit', { data: body })
   }
 };

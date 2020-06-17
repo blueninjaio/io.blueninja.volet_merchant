@@ -6,12 +6,15 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  Alert
 } from "react-native";
 import { Icon, Thumbnail } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
-import { ImagePicker, Permissions, LinearGradient } from "expo";
+import * as ImagePicker from 'expo-image-picker'
+import * as Permissions from 'expo-permissions'
+import { LinearGradient } from 'expo-linear-gradient'
 import api from "../../../api/index";
 
 export class PersonalDetails extends Component {
@@ -28,14 +31,26 @@ export class PersonalDetails extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getPermissionAsync();
+    this.getCurrentUserDetails()
+  }
+
+  getCurrentUserDetails = async () => {
+    const { user } = await api.usersInfo()
+    this.setState({
+      firstName: user.f_name,
+      lastName: user.l_name,
+      email: user.email,
+      contact: user.contact,
+    })
+  }
+
   /**
   |--------------------------------------------------
   | Implementing Permission Requst for Image picker
   |--------------------------------------------------
   */
-  componentDidMount() {
-    this.getPermissionAsync();
-  }
   getPermissionAsync = async () => {
     const permission = await Permissions.getAsync(Permissions.CAMERA_ROLL);
     if (permission.status !== "granted") {
@@ -74,7 +89,7 @@ export class PersonalDetails extends Component {
     }
   };
 
-  inputCheck = () => {
+  inputCheck = async () => {
     const { firstName, lastName, email, address, imageUri } = this.state;
 
     let formData = new FormData();
@@ -84,26 +99,40 @@ export class PersonalDetails extends Component {
     formData.append("address", address);
     formData.append("image", `data:image/jpg;base64,${imageUri}`);
 
-    console.log(formData);
-
-    api
-      .editInfo(formData)
-      .then(data => {
-        console.log("data: ", data);
-        if (data.success === true) {
-          console.log("Personal Details", data);
-        } else alert(data.message);
+    try {
+      const data = await api.editInfo({
+        f_name: firstName,
+        l_name: lastName,
+        email,
+        address,
       })
-      .catch(err => {
-        console.log("Error for personal details:", err);
+      if (data.success) {
+        Alert.alert('Update Profile', 'Successful')
+      } else {
+        Alert.alert('Update Profile', 'Failed')
+      }
+    } catch (error) {
+      console.log('error: ', error)
+    }
 
-        Alert.alert(
-          "Error connecting to server",
-          `Please try again later`,
-          [{ text: "OK", onPress: () => null }],
-          { cancelable: false }
-        );
-      });
+//     api
+//       .editInfo(formData)
+//       .then(data => {
+//         console.log("data: ", data);
+//         if (data.success === true) {
+//           console.log("Personal Details", data);
+//         } else alert(data.message);
+//       })
+//       .catch(err => {
+//         console.log("Error for personal details:", err);
+
+//         Alert.alert(
+//           "Error connecting to server",
+//           `Please try again later`,
+//           [{ text: "OK", onPress: () => null }],
+//           { cancelable: false }
+//         );
+//       });
   };
 
   render() {
@@ -126,11 +155,11 @@ export class PersonalDetails extends Component {
               }}
             >
               {this.state.imageUri !== "" ? (
-                <Thumbnail
-                  large
-                  style={{ backgroundColor: "grey" }}
-                  source={{ uri: `${this.state.imageUri}` }}
-                />
+                  <Thumbnail
+                    large
+                    style={{ backgroundColor: "grey" }}
+                    source={{ uri: `data:image/png;base64,${this.state.imageUri}` }}
+                  />
               ) : (
                 <Thumbnail large style={{ backgroundColor: "grey" }} />
               )}

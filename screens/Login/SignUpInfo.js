@@ -11,13 +11,13 @@ import {
 } from "react-native";
 
 import {
-  LinearGradient,
   Notifications,
-  Permissions,
-  LocalAuthentication,
   Expo,
   Constants
 } from "expo";
+import { LinearGradient } from 'expo-linear-gradient'
+import * as Permissions from 'expo-permissions'
+import * as LocalAuthentication from 'expo-local-authentication'
 import { TextInput } from "react-native-gesture-handler";
 export const { width, height } = Dimensions.get("window");
 
@@ -71,8 +71,7 @@ export class SignUpInfo extends Component {
         password
       )
       .then(data => {
-        console.log(data);
-        console.log("Sign Up :", data);
+        console.log('data: ', data)
         this.reduxLogin();
         // if (data.success === true) {
         //   Alert.alert(
@@ -116,7 +115,7 @@ export class SignUpInfo extends Component {
         .then(data => {
           console.log("Fetch Data: ", data);
           if (data.success) {
-            this._storeData(data.token, data.merchant).then(() => {
+            this._storeData(data.token, data.user).then(() => {
               this.registerForPushNotificationsAsync();
               if (Platform.OS === "android") {
                 this.showAndroidAlert();
