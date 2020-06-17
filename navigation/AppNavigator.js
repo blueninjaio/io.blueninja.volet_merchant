@@ -13,6 +13,7 @@ import Home from "../screens/Volet/Home";
 import Statistic from "../screens/Volet/Statistic";
 import Business from "../screens/Volet/Business";
 import Profile from "../screens/Volet/Profile";
+import HomeIcon from '../assets/home.png';
 
 const UserTabNavigator = createBottomTabNavigator(
   {
@@ -22,7 +23,7 @@ const UserTabNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) =>
           tintColor === "black" ? (
             <Image
-              source={require("../assets/Home.png")}
+              source={HomeIcon}
               resizeMode="contain"
               style={{ width: 103, height: 90, marginTop: 12 }}
             />
@@ -79,7 +80,7 @@ const UserTabNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) =>
           tintColor === "black" ? (
             <Image
-              source={require("../assets/Profile.png")}
+              source={require("../assets/profile.png")}
               resizeMode="contain"
               style={{ width: 103, height: 90, marginTop: 12 }}
             />
