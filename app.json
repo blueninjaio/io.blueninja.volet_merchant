@@ -3,7 +3,6 @@
     "name": "VoletMerchant",
     "slug": "VoletMerchant",
     "privacy": "public",
-    "sdkVersion": "37.0.0",
     "description": "Volet Merchant App",
     "platforms": [
       "ios",

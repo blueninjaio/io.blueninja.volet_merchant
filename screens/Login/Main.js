@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Text,
   View,
@@ -10,41 +10,34 @@ import {
   Platform,
   Image
 } from "react-native";
-import { LocalAuthentication, LinearGradient } from "expo";
+import * as LocalAuthentication from 'expo-local-authentication';
+import { LinearGradient } from 'expo-linear-gradient';
 export const { width, height } = Dimensions.get("window");
 import { connect } from "react-redux";
 
-export class Main extends Component {
-  constructor(props) {
-    super(props);
+const Main = (props) => {
+  const [state, setState] = React.useState({
+    compatible: false,
+    fingerPrints: false,
+    result: '',
+    token: '',
+  })
 
-    this.state = {
-      compatible: false,
-      fingerprints: false,
-      result: "",
-      token: ""
-    };
-  }
-  componentDidMount() {
-    this.checkDeviceForHardware();
-    this.checkForFingerprints();
-    this.getToken();
-  }
+  React.useEffect(() => {
+    checkDeviceForHardware();
+    checkForFingerprints();
+    getToken();
+  }, [])
 
-  /**
-  |--------------------------------------------------
-  | Implementation of retrieving User Token
-  |--------------------------------------------------
-  */
   getToken = async () => {
     try {
       let value = await AsyncStorage.getItem("token");
       if (value !== null) {
-        this.setState({ token: value });
+        setState({ ...state, token: value });
         if (Platform.OS === "android") {
-          this.showAndroidAlert();
+          showAndroidAlert();
         } else {
-          this.scanFingerprint();
+          scanFingerprint();
         }
       }
     } catch (error) {
@@ -64,25 +57,29 @@ export class Main extends Component {
   */
 
   checkDeviceForHardware = async () => {
-    let compatible = await LocalAuthentication.hasHardwareAsync();
-    this.setState({ compatible });
+    try {
+      let compatible = await LocalAuthentication.hasHardwareAsync();
+      setState({ ...state, compatible });
+    } catch (error) {
+      console.log('error: ', error)
+    }
   };
 
   checkForFingerprints = async () => {
     let fingerprints = await LocalAuthentication.isEnrolledAsync();
-    this.setState({ fingerprints });
+    setState({ ...state, fingerprints });
   };
 
   scanFingerprint = async () => {
     let result = await LocalAuthentication.authenticateAsync(
       "Scan your finger."
     );
-    this.login(result.success);
+    login(result.success);
   };
 
   login = response => {
     if (response === true) {
-      this.props.logMeIn();
+      props.logMeIn();
     }
   };
 
@@ -99,65 +96,63 @@ export class Main extends Component {
         {
           text: "Scan",
           onPress: () => {
-            this.scanFingerprint();
+            scanFingerprint();
           }
         },
         {
           text: "Cancel",
-          onPress: () => this.props.navigation.navigate("Login"),
-
+          onPress: () => props.navigation.navigate("Login"),
           style: "cancel"
         }
       ]
     );
   };
-  render() {
-    return (
-      <View style={styles.container}>
-        <LinearGradient colors={["#36D1DC", "#5B86E5"]}>
-          <View style={styles.SignUpView}>
-            <Image
-              source={require("../../assets/VoletLogo.png")}
-              resizeMode="contain"
-              style={styles.Logo}
-            />
-            <Text
-              style={{
-                textTransform: "uppercase",
-                color: "white",
-                fontWeight: "bold"
-              }}
-            >
-              merchant
-            </Text>
-          </View>
-        </LinearGradient>
-        <View style={styles.buttonSignUp}>
-          <LinearGradient
-            colors={["#36D1DC", "#5B86E5"]}
-            style={styles.buttonStyle}
+
+  return (
+    <View style={styles.container}>
+      <LinearGradient colors={["#36D1DC", "#5B86E5"]}>
+        <View style={styles.SignUpView}>
+          <Image
+            source={require("../../assets/VoletLogo.png")}
+            resizeMode="contain"
+            style={styles.Logo}
+          />
+          <Text
+            style={{
+              textTransform: "uppercase",
+              color: "white",
+              fontWeight: "bold"
+            }}
           >
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              onPress={() => this.props.navigation.navigate("Signup")}
-            >
-              <Text style={styles.signupText}>Sign Up</Text>
-            </TouchableOpacity>
-          </LinearGradient>
-          <TouchableOpacity
-            onPress={
-              this.state.token !== ""
-                ? () => this.getToken()
-                : () => this.props.navigation.navigate("Login")
-            }
-            style={styles.buttonStyle2}
-          >
-            <Text style={styles.loginText}>Log In</Text>
-          </TouchableOpacity>
+            merchant
+          </Text>
         </View>
+      </LinearGradient>
+      <View style={styles.buttonSignUp}>
+        <LinearGradient
+          colors={["#36D1DC", "#5B86E5"]}
+          style={styles.buttonStyle}
+        >
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={() => props.navigation.navigate("Signup")}
+          >
+            <Text style={styles.signupText}>Sign Up</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+        <TouchableOpacity
+          onPress={
+            state.token !== ""
+            ? () => getToken()
+            : () => props.navigation.navigate("Login")
+          }
+          style={styles.buttonStyle2}
+        >
+          <Text style={styles.loginText}>Log In</Text>
+        </TouchableOpacity>
       </View>
-    );
-  }
+    </View>
+  );
 }
 
 const mapStateToProps = state => {
@@ -171,6 +166,7 @@ const mapDispatchToProps = dispatch => {
     logMeIn: () => dispatch({ type: "LOGIN" })
   };
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
